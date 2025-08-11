@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Price Forecasting - KrishiTech</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/market-forecast.css}">
+    <link rel="stylesheet" th:href="@{/css/cropPrice.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <h1>KrishiTech</h1>
+            <span class="tagline">Smart Farming Solutions</span>
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <ul class="nav-menu">
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/guides}">Farming Guides</a></li>
+            <!--              <li><a th:href="@{/machinery}">Machinery</a></li>-->
+            <li><a th:href="@{/weatherForecast}">Weather</a></li>
+            <li><a th:href="@{/marketForecast}" class="active">Market</a></li>
+            <!-- Show Profile Dropdown If User Is Logged In -->
+            <li class="dropdown" th:if="${session.userId}">
+                <a href="#" class="dropbtn">Profile ▼</a>
+                <ul class="dropdown-content">
+                    <li><a th:href="@{/profile}">View Profile</a></li>
+                    <li><a th:href="@{/settings}">Settings</a></li>
+                    <li><a th:href="@{/forum}">Community</a></li>
+                    <li><a th:href="@{/logout}">Logout</a></li>
+                </ul>
+            </li>
+
+            <!-- Show Login Option If User Is NOT Logged In -->
+            <li th:if="${session.userId == null}">
+                <a th:href="@{/login}">Login</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<section class="market-hero">
+    <div class="market-hero-content">
+        <h1>Crop Price & Market Forecasting</h1>
+        <p>Make informed decisions about when and where to sell your crops for maximum profit</p>
+        <div class="market-search-container">
+            <input type="text" id="marketSearch" placeholder="Search for a crop...">
+            <button id="searchButton"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+</section>
+
+<!--<section class="market-overview">-->
+<!--    <div class="container">-->
+<!--        <h2>Market Overview</h2>-->
+<!--        <div class="market-date">-->
+<!--            <i class="fas fa-calendar-alt"></i>-->
+<!--            <span id="currentDate">June 20, 2025</span>-->
+<!--        </div>-->
+<!--        <div class="market-cards">-->
+<!--            <div class="market-card">-->
+<!--                <div class="market-card-header">-->
+<!--                    <h3>Corn</h3>-->
+<!--                    <span class="price-trend up">-->
+<!--                          <i class="fas fa-arrow-up"></i> 2.3%-->
+<!--                      </span>-->
+<!--                </div>-->
+<!--                <div class="current-price">$5.87<span class="unit">/bushel</span></div>-->
+<!--                <div class="price-range">-->
+<!--                    <span>Daily Range: $5.75 - $5.92</span>-->
+<!--                </div>-->
+<!--                <div class="forecast-indicator positive">-->
+<!--                    <i class="fas fa-chart-line"></i> Upward Trend-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+
+<div class="container">
+    <header>
+        <h1>Crop Price Prediction</h1>
+        <p>Get market price predictions for your crops</p>
+    </header>
+
+    <main>
+        <div class="prediction-form">
+            <h2>Enter Crop Details</h2>
+            <form id="predictionForm" >
+                <div class="form-group">
+                    <label for="cropType">Crop Type:</label>
+                    <select id="cropType" required>
+                        <option value="">Select a crop</option>
+                        <option value="Carrot(Local)">Carrot</option>
+                        <option value="Chilli Dry">Chilli Dry</option>
+                        <option value="Ginger">Ginger</option>
+                        <option value="Cauli Local">Cauli Local</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="month">Month</label>
+                    <select id="month" name="month" required>
+                        <option value="">Select a month</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="predictionYear">Prediction Year</label>
+                    <select id="predictionYear" name="year" required>
+                        <option value="">Select Year</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-predict" id="predictBtn">Predict Price</button>
+            </form>
+            <input type="hidden" id="isLoggedIn" th:value="${session.userId != null}" />
+        </div>
+
+        <div class="prediction-result" id="predictionResult">
+            <h2>Prediction Result</h2>
+            <div class="result-container">
+                <p>Enter crop details and click "Predict Price" to see the prediction.</p>
+            </div>
+        </div>
+    </main>
+
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+        <p>Analyzing data...</p>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-logo">
+            <h2><i class="fas fa-leaf"></i> KrishiTech</h2>
+            <p>Smart Farming Solutions</p><br>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-links">
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a th:href="@{/guides}">Farming Guides</a></li>
+                    <li><a th:href="@{/weatherForecast}">Weather Forecast</a></li>
+                    <li><a th:href="@{/marketForecast}">Market Price Forecast</a></li>
+                    <li><a th:href="@{/forum}">Community Forums</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</li>
+                    <li><i class="fas fa-phone"></i> 9800000000</li>
+                    <li><i class="fas fa-envelope"></i> KrishiTech@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script th:src="@{/js/market-forecast.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KrishiTech - Smart Farming Solutions</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+<header>
+  <nav class="navbar">
+    <div class="logo">
+      <h1><i class="fas fa-leaf"></i> KrishiTech</h1>
+      <span class="tagline">Smart Farming Solutions</span>
+    </div>
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+    <ul class="nav-menu">
+      <li><a th:href="@{/}" class="active">Home</a></li>
+      <li><a th:href="@{/guides}">Farming Guides</a></li>
+      <li><a th:href="@{/weatherForecast}">Weather</a></li>
+      <li><a th:href="@{/marketForecast}">Market</a></li>
+
+      <li class="dropdown" th:if="${session.userId}">
+        <a href="#" class="dropbtn">Profile ▼</a>
+        <ul class="dropdown-content">
+          <li><a th:href="@{/profile}">View Profile</a></li>
+          <li><a th:href="@{/settings}">Settings</a></li>
+          <li><a th:href="@{/forum}">Community</a></li>
+          <li><a th:href="@{/logout}">Logout</a></li>
+        </ul>
+      </li>
+
+      <!-- Show Login Option If User Is NOT Logged In -->
+      <li th:if="${session.userId == null}">
+        <a th:href="@{/login}">Login</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<section id="home" class="hero">
+  <div class="hero-content">
+    <h1>Grow Better with KrishiTech</h1>
+    <p>Your complete resource for farming guides, weather forecasts, machinery information, community support, and market insights.</p>
+    </p>
+    <div class="cta-buttons">
+      <a href="#features" class="btn btn-primary">Explore Features</a>
+      <a th:href="@{/forum}" class="btn btn-secondary">Join Community</a>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="features">
+  <div class="container">
+    <div class="section-header">
+      <h2>Our Features</h2>
+      <p>Comprehensive tools to manage your farm efficiently</p>
+    </div>
+    <div class="feature-cards">
+      <a th:href="@{/guides}" class="active">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-book"></i>
+        </div>
+        <h3>Farming Guides</h3>
+
+        <p>Comprehensive guides on crop cultivation, livestock management, and sustainable practices.</p>
+      </div>
+      </a>
+      <a th:href="@{/weatherForecast}">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-cloud-sun"></i>
+        </div>
+        <h3>Weather Forecast</h3>
+        <p>Real-time weather updates and forecasts specific to your farm location</p>
+      </div>
+      </a>
+<!--      <div class="feature-card">-->
+<!--        <div class="feature-icon">-->
+<!--          <i class="fas fa-tractor"></i>-->
+<!--        </div>-->
+<!--        <h3>Machinery Guides</h3>-->
+<!--        <p>Information on agricultural machinery, maintenance tips, and usage guidelines.</p>-->
+<!--      </div>-->
+      <a th:href="@{/forum}">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3>Community Forum</h3>
+        <p>Connect with fellow farmers, share experiences, and seek advice from experts.</p>
+      </div>
+      </a>
+      <a th:href="@{/marketForecast}">
+      <div class="feature-card">
+        <div class="feature-icon">
+
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Market Insights</h3>
+        <p>Stay updated with market trends, pricing forecasts, and demand analysis.</p>
+      </div>
+      </a>
+<!--      <div class="feature-card">-->
+<!--        <div class="feature-icon">-->
+
+<!--          <i class="fas fa-calendar-alt"></i>-->
+<!--        </div>-->
+<!--        <h3>Seasonal Reminders</h3>-->
+<!--        <p>Timely notifications for seasonal farming activities and crop rotation.</p>-->
+<!--      </div>-->
+    </div>
+  </div>
+</section>
+
+<!--<section class="newsletter">-->
+<!--  <div class="container">-->
+<!--    <div class="newsletter-content">-->
+<!--      <h2>Stay Updated</h2>-->
+<!--      <p>Subscribe to our newsletter for the latest farming tips, weather alerts, and market updates.</p>-->
+<!--      <form id="newsletterForm" class="newsletter-form">-->
+<!--        <input type="email" placeholder="Your email address" required>-->
+<!--        <button type="submit" class="btn btn-primary">Subscribe</button>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-logo">
+      <h2><i class="fas fa-leaf"></i> KrishiTech</h2>
+      <p>Smart Farming Solutions</p><br>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a th:href="@{/guides}">Farming Guides</a></li>
+          <li><a th:href="@{/weatherForecast}">Weather Forecast</a></li>
+          <li><a th:href="@{/marketForecast}">Market Price Forecast</a></li>
+          <li><a th:href="@{/forum}">Community Forums</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Contact Us</h3>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</li>
+          <li><i class="fas fa-phone"></i> 9800000000</li>
+          <li><i class="fas fa-envelope"></i> KrishiTech@gmail.com</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

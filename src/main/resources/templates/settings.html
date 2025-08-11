@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - KrishiTech</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <h1>KrishiTech</h1>
+            <span class="tagline">Smart Farming Solutions</span>
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/guides">Farming Guides</a></li>
+            <li><a href="/weatherForecast">Weather</a></li>
+            <li><a href="/marketForecast">Market</a></li>
+            <!-- Show Profile Dropdown If User Is Logged In -->
+            <li class="dropdown">
+                <a href="#" class="dropbtn active">Profile ▼</a>
+                <ul class="dropdown-content">
+                    <li><a href="/profile">View Profile</a></li>
+                    <li><a href="/settings" class="active">Settings</a></li>
+                    <li><a href="/forum">Community</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<section class="profile-hero">
+    <div class="profile-hero-content">
+        <div class="profile-avatar">
+            <form id="profileImageForm" enctype="multipart/form-data">
+                <input type="file" id="profileImage" name="profileImage" accept="image/*" style="display: none;"/>
+            </form>
+
+            <label for="profileImage" class="profile-avatar-placeholder" style="cursor: pointer;">
+                <img th:if="${profile != null and profile.profileImage != null}" th:src="'/uploads/profile/' + ${profile.profileImage}" alt="Profile Image"/>
+                <i class="fas fa-user" th:if="${profile == null or profile.profileImage == null}"></i>
+            </label>
+
+        </div>
+        <h1 th:text="${profile != null && !#strings.isEmpty(profile.fullName) ? profile.fullName : user.name}"></h1>
+    </div>
+</section>
+
+
+<section class="profile-content">
+    <div class="container">
+        <!-- Settings Tab -->
+        <div class="profile-tab-content active" id="settings-content">
+            <div class="settings-header">
+                <h2>Account Settings</h2>
+            </div>
+
+<!--            <div class="settings-section">-->
+<!--                <h3>Notification Preferences</h3>-->
+<!--                <div class="form-group">-->
+<!--                    <label>-->
+<!--                        <input type="checkbox" th:checked="${user.emailNotifications}"> Email Notifications-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label>-->
+<!--                        <input type="checkbox" th:checked="${user.smsNotifications}"> SMS Alerts-->
+<!--                    </label>-->
+<!--                </div>-->
+<!--                <button type="button" class="btn btn-secondary">Save Preferences</button>-->
+<!--            </div>-->
+
+<!--            <div class="settings-section">-->
+<!--                <h3>Security</h3>-->
+<!--                <div class="form-group">-->
+<!--                    <label>Two-Factor Authentication</label>-->
+<!--                    <label class="switch">-->
+<!--                        <input type="checkbox" th:checked="${user.twoFactorEnabled}">-->
+<!--                        <span class="slider round"></span>-->
+<!--                    </label>-->
+<!--                    <small>Add an extra layer of security to your account</small>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="settings-container">
+                <div class="settings-section">
+                    <h3>Change Password</h3>
+                    <form id="passwordForm" class="settings-form" action="/updatePassword" method="POST">
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" id="currentPassword" name="currentPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" name="newPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                        <div th:if="${param.error}" class="error-message">
+                            <p th:text="${param.error}" style="color: red">Invalid credentials!</p>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Change Password</button>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-logo">
+            <h2><i class="fas fa-leaf"></i> KrishiTech</h2>
+            <p>Smart Farming Solutions</p><br>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-links">
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a th:href="@{/guides}">Farming Guides</a></li>
+                    <li><a th:href="@{/weatherForecast}">Weather Forecast</a></li>
+                    <li><a th:href="@{/marketForecast}">Market Price Forecast</a></li>
+                    <li><a th:href="@{/forum}">Community Forums</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</li>
+                    <li><i class="fas fa-phone"></i> 9800000000</li>
+                    <li><i class="fas fa-envelope"></i> KrishiTech@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

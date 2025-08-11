@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - KrishiTech Admin</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-header">
+        <div class="admin-sidebar-logo">
+          <h1>KrishiTech</h1>
+        </div>
+        <button class="admin-sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <nav class="admin-sidebar-menu">
+        <ul>
+          <li>
+            <a th:href="@{adminDashboard}">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{users}">
+              <i class="fas fa-users"></i>
+              <span>User Management</span>
+            </a>
+          </li>
+<!--          <li>-->
+<!--            <a th:href="@{content}">-->
+<!--              <i class="fas fa-file-alt"></i>-->
+<!--              <span>Content Management</span>-->
+<!--            </a>-->
+<!--          </li>-->
+          <li>
+            <a th:href="@{adminGuides}">
+              <i class="fas fa-book"></i>
+              <span>Farming Guides</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{forums}">
+              <i class="fas fa-comments"></i>
+              <span>Forums</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{marketData}">
+              <i class="fas fa-chart-line"></i>
+              <span>Market Data</span>
+            </a>
+          </li>
+<!--          <li>-->
+<!--            <a th:href="@{adminMachinery}">-->
+<!--              <i class="fas fa-tractor"></i>-->
+<!--              <span>Machinery Listings</span>-->
+<!--            </a>-->
+<!--          </li>-->
+        </ul>
+
+        <div class="admin-sidebar-divider"></div>
+
+        <ul>
+          <li>
+            <a href="analytics.html">
+              <i class="fas fa-chart-bar"></i>
+              <span>Analytics</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{settings}" class="active">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+      <!-- Header -->
+      <header class="admin-header">
+        <div class="admin-header-title">
+          <h1>System Settings</h1>
+          <div class="admin-header-breadcrumb">
+            <a href="dashboard.html">Home</a>
+            <span>/</span>
+            <span>Settings</span>
+          </div>
+        </div>
+        
+        <div class="admin-header-actions">
+<!--          <div class="admin-search">-->
+<!--            <i class="fas fa-search"></i>-->
+<!--            <input type="text" placeholder="Search settings...">-->
+<!--          </div>-->
+          
+          <div class="admin-user-menu" id="userMenu">
+            <button class="admin-user-button" id="userMenuButton">
+              <div class="admin-user-avatar">
+                <span th:text="${(session.userName.contains(' ') ?
+                (#strings.substring(session.userName, 0, 1) + #strings.substring(session.userName, session.userName.indexOf(' ') + 1, session.userName.indexOf(' ') + 2)):
+                (#strings.substring(session.userName, 0, 1))).toUpperCase()}"></span>
+              </div>
+              <div class="admin-user-info">
+                <div class="admin-user-name" th:text="${session.userName}"></div>
+                <div class="admin-user-role" th:text="${session.role}"></div>
+              </div>
+            </button>
+            
+            <div class="admin-user-dropdown" id="userDropdown">
+              <ul>
+                <div class="admin-user-dropdown-divider"></div>
+                <li>
+                  <a th:href="@{/adminLogout}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Settings Navigation -->
+      <div class="admin-settings-nav">
+        <ul class="admin-settings-tabs">
+          <li>
+            <button class="admin-settings-tab active" data-tab="general">
+              <i class="fas fa-sliders-h"></i>
+              General
+            </button>
+          </li>
+          <li>
+            <button class="admin-settings-tab" data-tab="appearance">
+              <i class="fas fa-palette"></i>
+              Appearance
+            </button>
+          </li>
+          <li>
+            <button class="admin-settings-tab" data-tab="notifications">
+              <i class="fas fa-bell"></i>
+              Notifications
+            </button>
+          </li>
+          <li>
+            <button class="admin-settings-tab" data-tab="security">
+              <i class="fas fa-shield-alt"></i>
+              Security
+            </button>
+          </li>
+          <li>
+            <button class="admin-settings-tab" data-tab="integrations">
+              <i class="fas fa-plug"></i>
+              Integrations
+            </button>
+          </li>
+          <li>
+            <button class="admin-settings-tab" data-tab="backup">
+              <i class="fas fa-database"></i>
+              Backup & Export
+            </button>
+          </li>
+          <li>
+            <button class="admin-settings-tab" data-tab="advanced">
+              <i class="fas fa-code"></i>
+              Advanced
+            </button>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Settings Content -->
+      <div class="admin-settings-content">
+        <!-- General Settings -->
+        <div class="admin-settings-section active" id="general-settings">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">General Settings</h3>
+              <div class="admin-card-actions">
+                <button class="btn btn-secondary" id="resetGeneralBtn">
+                  <i class="fas fa-undo"></i> Reset to Default
+                </button>
+              </div>
+            </div>
+            
+            <form class="admin-form">
+              <div class="admin-form-group">
+                <label for="siteName">Site Name</label>
+                <input type="text" id="siteName" name="siteName" value="KrishiTech Platform">
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="siteDescription">Site Description</label>
+                <textarea id="siteDescription" name="siteDescription" rows="3">The leading agricultural technology platform for farmers and agricultural professionals.</textarea>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="contactEmail">Contact Email</label>
+                <input type="email" id="contactEmail" name="contactEmail" value="support@krishitech.com">
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="timezone">Timezone</label>
+                <select id="timezone" name="timezone">
+                  <option value="UTC-8">Pacific Time (UTC-8)</option>
+                  <option value="UTC-7">Mountain Time (UTC-7)</option>
+                  <option value="UTC-6">Central Time (UTC-6)</option>
+                  <option value="UTC-5" selected>Eastern Time (UTC-5)</option>
+                  <option value="UTC+0">Greenwich Mean Time (UTC+0)</option>
+                  <option value="UTC+1">Central European Time (UTC+1)</option>
+                  <option value="UTC+2">Eastern European Time (UTC+2)</option>
+                </select>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="dateFormat">Date Format</label>
+                <select id="dateFormat" name="dateFormat">
+                  <option value="MM/DD/YYYY" selected>MM/DD/YYYY</option>
+                  <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                  <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                </select>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="language">Default Language</label>
+                <select id="language" name="language">
+                  <option value="en" selected>English</option>
+                  <option value="es">Spanish</option>
+                  <option value="fr">French</option>
+                  <option value="de">German</option>
+                </select>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="maintenanceMode">Maintenance Mode</label>
+                <div class="admin-toggle-switch">
+                  <input type="checkbox" id="maintenanceMode" name="maintenanceMode">
+                  <label for="maintenanceMode"></label>
+                </div>
+                <p class="admin-form-help">When enabled, the site will display a maintenance message to all non-admin users.</p>
+              </div>
+              
+              <div class="admin-form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Appearance Settings -->
+        <div class="admin-settings-section" id="appearance-settings">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Appearance Settings</h3>
+            </div>
+            
+            <form class="admin-form">
+              <div class="admin-form-group">
+                <label for="theme">Admin Theme</label>
+                <select id="theme" name="theme">
+                  <option value="light" selected>Light</option>
+                  <option value="dark">Dark</option>
+                  <option value="system">System Default</option>
+                </select>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="primaryColor">Primary Color</label>
+                <div class="admin-color-picker">
+                  <input type="color" id="primaryColor" name="primaryColor" value="#4caf50">
+                  <input type="text" value="#4caf50">
+                </div>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="secondaryColor">Secondary Color</label>
+                <div class="admin-color-picker">
+                  <input type="color" id="secondaryColor" name="secondaryColor" value="#ff9800">
+                  <input type="text" value="#ff9800">
+                </div>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="logo">Site Logo</label>
+                <div class="admin-file-upload">
+                  <input type="file" id="logo" name="logo" accept="image/*">
+                  <label for="logo">
+                    <i class="fas fa-upload"></i>
+                    <span>Choose a file...</span>
+                  </label>
+                  <button type="button" class="btn btn-text">Remove</button>
+                </div>
+                <p class="admin-form-help">Recommended size: 200x50 pixels. Max file size: 2MB.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="favicon">Favicon</label>
+                <div class="admin-file-upload">
+                  <input type="file" id="favicon" name="favicon" accept="image/x-icon,image/png">
+                  <label for="favicon">
+                    <i class="fas fa-upload"></i>
+                    <span>Choose a file...</span>
+                  </label>
+                  <button type="button" class="btn btn-text">Remove</button>
+                </div>
+                <p class="admin-form-help">Recommended size: 32x32 pixels. Max file size: 1MB.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="customCSS">Custom CSS</label>
+                <textarea id="customCSS" name="customCSS" rows="5" placeholder="/* Add your custom CSS here */"></textarea>
+                <p class="admin-form-help">Custom CSS will be applied to the entire platform.</p>
+              </div>
+              
+              <div class="admin-form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Notification Settings -->
+        <div class="admin-settings-section" id="notifications-settings">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Notification Settings</h3>
+            </div>
+            
+            <form class="admin-form">
+              <div class="admin-form-group">
+                <label>Email Notifications</label>
+                <div class="admin-checkbox-group">
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="emailNewUser" name="emailNewUser" checked>
+                    <label for="emailNewUser">New user registration</label>
+                  </div>
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="emailNewContent" name="emailNewContent" checked>
+                    <label for="emailNewContent">New content submission</label>
+                  </div>
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="emailNewComment" name="emailNewComment" checked>
+                    <label for="emailNewComment">New comment</label>
+                  </div>
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="emailNewListing" name="emailNewListing" checked>
+                    <label for="emailNewListing">New machinery listing</label>
+                  </div>
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="emailSystemAlert" name="emailSystemAlert" checked>
+                    <label for="emailSystemAlert">System alerts</label>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="admin-form-group">
+                <label>In-App Notifications</label>
+                <div class="admin-checkbox-group">
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="appNewUser" name="appNewUser" checked>
+                    <label for="appNewUser">New user registration</label>
+                  </div>
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="appNewContent" name="appNewContent" checked>
+                    <label for="appNewContent">New content submission</label>
+                  </div>
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="appNewComment" name="appNewComment" checked>
+                    <label for="appNewComment">New comment</label>
+                  </div>
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="appNewListing" name="appNewListing" checked>
+                    <label for="appNewListing">New machinery listing</label>
+                  </div>
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="appSystemAlert" name="appSystemAlert" checked>
+                    <label for="appSystemAlert">System alerts</label>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="emailProvider">Email Provider</label>
+                <select id="emailProvider" name="emailProvider">
+                  <option value="smtp" selected>SMTP</option>
+                  <option value="sendgrid">SendGrid</option>
+                  <option value="mailchimp">Mailchimp</option>
+                  <option value="aws-ses">Amazon SES</option>
+                </select>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="smtpHost">SMTP Host</label>
+                <input type="text" id="smtpHost" name="smtpHost" value="smtp.krishitech.com">
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="smtpPort">SMTP Port</label>
+                <input type="number" id="smtpPort" name="smtpPort" value="587">
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="smtpUsername">SMTP Username</label>
+                <input type="text" id="smtpUsername" name="smtpUsername" value="notifications@krishitech.com">
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="smtpPassword">SMTP Password</label>
+                <input type="password" id="smtpPassword" name="smtpPassword" value="••••••••••••">
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="smtpEncryption">SMTP Encryption</label>
+                <select id="smtpEncryption" name="smtpEncryption">
+                  <option value="tls" selected>TLS</option>
+                  <option value="ssl">SSL</option>
+                  <option value="none">None</option>
+                </select>
+              </div>
+              
+              <div class="admin-form-actions">
+                <button type="button" class="btn btn-secondary" id="testEmailBtn">Test Email</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Security Settings -->
+        <div class="admin-settings-section" id="security-settings">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Security Settings</h3>
+            </div>
+            
+            <form class="admin-form">
+              <div class="admin-form-group">
+                <label for="twoFactorAuth">Two-Factor Authentication</label>
+                <div class="admin-toggle-switch">
+                  <input type="checkbox" id="twoFactorAuth" name="twoFactorAuth" checked>
+                  <label for="twoFactorAuth"></label>
+                </div>
+                <p class="admin-form-help">Require administrators to use two-factor authentication.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="passwordPolicy">Password Policy</label>
+                <select id="passwordPolicy" name="passwordPolicy">
+                  <option value="basic">Basic (8+ characters)</option>
+                  <option value="standard" selected>Standard (8+ chars, uppercase, lowercase, number)</option>
+                  <option value="strong">Strong (10+ chars, uppercase, lowercase, number, special)</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="sessionTimeout">Session Timeout (minutes)</label>
+                <input type="number" id="sessionTimeout" name="sessionTimeout" value="30">
+                <p class="admin-form-help">Time of inactivity before users are automatically logged out.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="loginAttempts">Max Login Attempts</label>
+                <input type="number" id="loginAttempts" name="loginAttempts" value="5">
+                <p class="admin-form-help">Number of failed login attempts before account is locked.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="accountLockDuration">Account Lock Duration (minutes)</label>
+                <input type="number" id="accountLockDuration" name="accountLockDuration" value="30">
+                <p class="admin-form-help">Time an account remains locked after exceeding max login attempts.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="forcePasswordReset">Force Password Reset</label>
+                <select id="forcePasswordReset" name="forcePasswordReset">
+                  <option value="30">Every 30 days</option>
+                  <option value="60">Every 60 days</option>
+                  <option value="90" selected>Every 90 days</option>
+                  <option value="180">Every 180 days</option>
+                  <option value="365">Every year</option>
+                  <option value="0">Never</option>
+                </select>
+              </div>
+              
+              <div class="admin-form-group">
+                <label>IP Restrictions</label>
+                <textarea id="ipRestrictions" name="ipRestrictions" rows="3" placeholder="Enter IP addresses or ranges, one per line"></textarea>
+                <p class="admin-form-help">Restrict admin access to specific IP addresses. Leave blank to allow all.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="recaptcha">reCAPTCHA Protection</label>
+                <div class="admin-toggle-switch">
+                  <input type="checkbox" id="recaptcha" name="recaptcha" checked>
+                  <label for="recaptcha"></label>
+                </div>
+                <p class="admin-form-help">Enable reCAPTCHA on login and registration forms.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="recaptchaSiteKey">reCAPTCHA Site Key</label>
+                <input type="text" id="recaptchaSiteKey" name="recaptchaSiteKey" value="6LdXXXXXXXXXXXXXXXXXXXXX">
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="recaptchaSecretKey">reCAPTCHA Secret Key</label>
+                <input type="password" id="recaptchaSecretKey" name="recaptchaSecretKey" value="6LdXXXXXXXXXXXXXXXXXXXXX">
+              </div>
+              
+              <div class="admin-form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Integrations Settings -->
+        <div class="admin-settings-section" id="integrations-settings">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Integrations</h3>
+              <div class="admin-card-actions">
+                <button class="btn btn-primary" id="addIntegrationBtn">
+                  <i class="fas fa-plus"></i> Add Integration
+                </button>
+              </div>
+            </div>
+            
+            <div class="admin-table-container">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Integration</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Last Sync</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Google Analytics</td>
+                    <td>Analytics</td>
+                    <td><span class="admin-status active">Connected</span></td>
+                    <td>June 18, 2025 08:15 AM</td>
+                    <td>
+                      <div class="admin-table-actions">
+                        <button class="admin-table-action edit">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="admin-table-action">
+                          <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="admin-table-action delete">
+                          <i class="fas fa-unlink"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Stripe</td>
+                    <td>Payment</td>
+                    <td><span class="admin-status active">Connected</span></td>
+                    <td>June 18, 2025 09:30 AM</td>
+                    <td>
+                      <div class="admin-table-actions">
+                        <button class="admin-table-action edit">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="admin-table-action">
+                          <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="admin-table-action delete">
+                          <i class="fas fa-unlink"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>USDA Market Data API</td>
+                    <td>Data</td>
+                    <td><span class="admin-status active">Connected</span></td>
+                    <td>June 18, 2025 07:45 AM</td>
+                    <td>
+                      <div class="admin-table-actions">
+                        <button class="admin-table-action edit">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="admin-table-action">
+                          <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="admin-table-action delete">
+                          <i class="fas fa-unlink"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Mailchimp</td>
+                    <td>Email Marketing</td>
+                    <td><span class="admin-status active">Connected</span></td>
+                    <td>June 17, 2025 04:20 PM</td>
+                    <td>
+                      <div class="admin-table-actions">
+                        <button class="admin-table-action edit">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="admin-table-action">
+                          <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="admin-table-action delete">
+                          <i class="fas fa-unlink"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Weather API</td>
+                    <td>Data</td>
+                    <td><span class="admin-status inactive">Disconnected</span></td>
+                    <td>Never</td>
+                    <td>
+                      <div class="admin-table-actions">
+                        <button class="admin-table-action">
+                          <i class="fas fa-plug"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="admin-card-header mt-4">
+              <h3 class="admin-card-title">API Settings</h3>
+            </div>
+            
+            <form class="admin-form">
+              <div class="admin-form-group">
+                <label for="enableAPI">Enable API Access</label>
+                <div class="admin-toggle-switch">
+                  <input type="checkbox" id="enableAPI" name="enableAPI" checked>
+                  <label for="enableAPI"></label>
+                </div>
+                <p class="admin-form-help">Allow external applications to access your data via API.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="apiKey">API Key</label>
+                <div class="admin-input-group">
+                  <input type="text" id="apiKey" name="apiKey" value="ag-api-7f8d9e6c5b4a3f2e1d0c9b8a7f6e5d4c" readonly>
+                  <button type="button" class="btn btn-secondary" id="regenerateApiKeyBtn">
+                    <i class="fas fa-sync-alt"></i> Regenerate
+                  </button>
+                </div>
+                <p class="admin-form-help">This key is used to authenticate API requests.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="apiRateLimit">API Rate Limit (requests per minute)</label>
+                <input type="number" id="apiRateLimit" name="apiRateLimit" value="60">
+              </div>
+              
+              <div class="admin-form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Backup & Export Settings -->
+        <div class="admin-settings-section" id="backup-settings">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Backup & Export</h3>
+            </div>
+            
+            <div class="admin-card-content">
+              <div class="admin-backup-section">
+                <h4>Automated Backups</h4>
+                <form class="admin-form">
+                  <div class="admin-form-group">
+                    <label for="enableAutoBackup">Enable Automated Backups</label>
+                    <div class="admin-toggle-switch">
+                      <input type="checkbox" id="enableAutoBackup" name="enableAutoBackup" checked>
+                      <label for="enableAutoBackup"></label>
+                    </div>
+                  </div>
+                  
+                  <div class="admin-form-group">
+                    <label for="backupFrequency">Backup Frequency</label>
+                    <select id="backupFrequency" name="backupFrequency">
+                      <option value="daily">Daily</option>
+                      <option value="weekly" selected>Weekly</option>
+                      <option value="biweekly">Bi-Weekly</option>
+                      <option value="monthly">Monthly</option>
+                    </select>
+                  </div>
+                  
+                  <div class="admin-form-group">
+                    <label for="backupTime">Backup Time</label>
+                    <input type="time" id="backupTime" name="backupTime" value="02:00">
+                    <p class="admin-form-help">Time is in 24-hour format and server timezone.</p>
+                  </div>
+                  
+                  <div class="admin-form-group">
+                    <label for="backupRetention">Backup Retention (days)</label>
+                    <input type="number" id="backupRetention" name="backupRetention" value="30">
+                    <p class="admin-form-help">Number of days to keep backups before automatic deletion.</p>
+                  </div>
+                  
+                  <div class="admin-form-group">
+                    <label for="backupStorage">Backup Storage Location</label>
+                    <select id="backupStorage" name="backupStorage">
+                      <option value="local" selected>Local Server</option>
+                      <option value="s3">Amazon S3</option>
+                      <option value="gcs">Google Cloud Storage</option>
+                      <option value="dropbox">Dropbox</option>
+                    </select>
+                  </div>
+                  
+                  <div class="admin-form-actions">
+                    <button type="submit" class="btn btn-primary">Save Backup Settings</button>
+                  </div>
+                </form>
+              </div>
+              
+              <div class="admin-backup-section mt-4">
+                <h4>Manual Backup</h4>
+                <p>Create a backup of your system data manually.</p>
+                <div class="admin-backup-options">
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="backupDatabase" name="backupDatabase" checked>
+                    <label for="backupDatabase">Database</label>
+                  </div>
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="backupFiles" name="backupFiles" checked>
+                    <label for="backupFiles">Files & Media</label>
+                  </div>
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="backupSettings" name="backupSettings" checked>
+                    <label for="backupSettings">System Settings</label>
+                  </div>
+                  <div class="admin-checkbox">
+                    <input type="checkbox" id="backupUsers" name="backupUsers" checked>
+                    <label for="backupUsers">User Data</label>
+                  </div>
+                </div>
+                <div class="admin-form-actions mt-3">
+                  <button type="button" class="btn btn-primary" id="createBackupBtn">
+                    <i class="fas fa-download"></i> Create Backup
+                  </button>
+                </div>
+              </div>
+              
+              <div class="admin-backup-section mt-4">
+                <h4>Recent Backups</h4>
+                <div class="admin-table-container">
+                  <table class="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Backup Name</th>
+                        <th>Date</th>
+                        <th>Size</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>backup_20250618_020015.zip</td>
+                        <td>June 18, 2025 02:00 AM</td>
+                        <td>245 MB</td>
+                        <td>Automated</td>
+                        <td>
+                          <div class="admin-table-actions">
+                            <button class="admin-table-action">
+                              <i class="fas fa-download"></i>
+                            </button>
+                            <button class="admin-table-action">
+                              <i class="fas fa-redo-alt"></i>
+                            </button>
+                            <button class="admin-table-action delete">
+                              <i class="fas fa-trash-alt"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>backup_20250611_020012.zip</td>
+                        <td>June 11, 2025 02:00 AM</td>
+                        <td>242 MB</td>
+                        <td>Automated</td>
+                        <td>
+                          <div class="admin-table-actions">
+                            <button class="admin-table-action">
+                              <i class="fas fa-download"></i>
+                            </button>
+                            <button class="admin-table-action">
+                              <i class="fas fa-redo-alt"></i>
+                            </button>
+                            <button class="admin-table-action delete">
+                              <i class="fas fa-trash-alt"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>manual_backup_20250610_143022.zip</td>
+                        <td>June 10, 2025 02:30 PM</td>
+                        <td>240 MB</td>
+                        <td>Manual</td>
+                        <td>
+                          <div class="admin-table-actions">
+                            <button class="admin-table-action">
+                              <i class="fas fa-download"></i>
+                            </button>
+                            <button class="admin-table-action">
+                              <i class="fas fa-redo-alt"></i>
+                            </button>
+                            <button class="admin-table-action delete">
+                              <i class="fas fa-trash-alt"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              
+              <div class="admin-backup-section mt-4">
+                <h4>Data Export</h4>
+                <p>Export specific data from your system.</p>
+                <form class="admin-form">
+                  <div class="admin-form-group">
+                    <label for="exportType">Export Type</label>
+                    <select id="exportType" name="exportType">
+                      <option value="users">Users</option>
+                      <option value="content">Content</option>
+                      <option value="machinery">Machinery Listings</option>
+                      <option value="forum">Forum Data</option>
+                      <option value="market">Market Data</option>
+                      <option value="analytics">Analytics</option>
+                    </select>
+                  </div>
+                  
+                  <div class="admin-form-group">
+                    <label for="exportFormat">Export Format</label>
+                    <select id="exportFormat" name="exportFormat">
+                      <option value="csv" selected>CSV</option>
+                      <option value="json">JSON</option>
+                      <option value="xml">XML</option>
+                      <option value="excel">Excel</option>
+                    </select>
+                  </div>
+                  
+                  <div class="admin-form-group">
+                    <label for="dateRange">Date Range</label>
+                    <div class="admin-date-range">
+                      <input type="date" id="startDate" name="startDate">
+                      <span>to</span>
+                      <input type="date" id="endDate" name="endDate">
+                    </div>
+                  </div>
+                  
+                  <div class="admin-form-actions">
+                    <button type="button" class="btn btn-primary" id="exportDataBtn">
+                      <i class="fas fa-file-export"></i> Export Data
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Advanced Settings -->
+        <div class="admin-settings-section" id="advanced-settings">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Advanced Settings</h3>
+              <div class="admin-card-actions">
+                <button class="btn btn-danger" id="resetSystemBtn">
+                  <i class="fas fa-exclamation-triangle"></i> Reset System
+                </button>
+              </div>
+            </div>
+            
+            <div class="admin-warning-box">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div>
+                <h4>Warning: Advanced Settings</h4>
+                <p>Changes to these settings can significantly impact your system. Proceed with caution.</p>
+              </div>
+            </div>
+            
+            <form class="admin-form">
+              <div class="admin-form-group">
+                <label for="debugMode">Debug Mode</label>
+                <div class="admin-toggle-switch">
+                  <input type="checkbox" id="debugMode" name="debugMode">
+                  <label for="debugMode"></label>
+                </div>
+                <p class="admin-form-help">Enable detailed error reporting and logging. Not recommended for production.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="cacheLifetime">Cache Lifetime (minutes)</label>
+                <input type="number" id="cacheLifetime" name="cacheLifetime" value="60">
+                <p class="admin-form-help">Time before cached data is refreshed. Set to 0 to disable caching.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="maxUploadSize">Maximum Upload Size (MB)</label>
+                <input type="number" id="maxUploadSize" name="maxUploadSize" value="10">
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="cronToken">Cron Job Security Token</label>
+                <div class="admin-input-group">
+                  <input type="text" id="cronToken" name="cronToken" value="7f8d9e6c5b4a3f2e1d0c9b8a7f6e5d4c" readonly>
+                  <button type="button" class="btn btn-secondary" id="regenerateCronTokenBtn">
+                    <i class="fas fa-sync-alt"></i> Regenerate
+                  </button>
+                </div>
+                <p class="admin-form-help">Used to authenticate scheduled tasks.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="customHeaders">Custom HTTP Headers</label>
+                <textarea id="customHeaders" name="customHeaders" rows="3" placeholder="X-Custom-Header: Value"></textarea>
+                <p class="admin-form-help">Add custom HTTP headers to all responses. One per line.</p>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="robotsTxt">robots.txt Content</label>
+                <textarea id="robotsTxt" name="robotsTxt" rows="5">User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Sitemap: https://krishitech.com/sitemap.xml</textarea>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="htaccessRules">Custom .htaccess Rules</label>
+                <textarea id="htaccessRules" name="htaccessRules" rows="5" placeholder="# Add custom .htaccess rules here"></textarea>
+                <p class="admin-form-help">Additional server rules. Use with caution.</p>
+              </div>
+              
+              <div class="admin-form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+          
+          <div class="admin-card mt-4">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">System Information</h3>
+            </div>
+            
+            <div class="admin-system-info">
+              <div class="admin-info-item">
+                <span class="admin-info-label">Platform Version:</span>
+                <span class="admin-info-value">KrishiTech Platform v3.5.2</span>
+              </div>
+              <div class="admin-info-item">
+                <span class="admin-info-label">PHP Version:</span>
+                <span class="admin-info-value">8.2.7</span>
+              </div>
+              <div class="admin-info-item">
+                <span class="admin-info-label">Database:</span>
+                <span class="admin-info-value">MySQL 8.0.28</span>
+              </div>
+              <div class="admin-info-item">
+                <span class="admin-info-label">Server:</span>
+                <span class="admin-info-value">Apache/2.4.54 (Unix)</span>
+              </div>
+              <div class="admin-info-item">
+                <span class="admin-info-label">Memory Limit:</span>
+                <span class="admin-info-value">256M</span>
+              </div>
+              <div class="admin-info-item">
+                <span class="admin-info-label">Max Execution Time:</span>
+                <span class="admin-info-value">60 seconds</span>
+              </div>
+              <div class="admin-info-item">
+                <span class="admin-info-label">Upload Max Filesize:</span>
+                <span class="admin-info-value">10M</span>
+              </div>
+              <div class="admin-info-item">
+                <span class="admin-info-label">Post Max Size:</span>
+                <span class="admin-info-value">12M</span>
+              </div>
+            </div>
+            
+            <div class="admin-form-actions mt-3">
+              <button type="button" class="btn btn-secondary" id="phpInfoBtn">
+                <i class="fas fa-info-circle"></i> View PHP Info
+              </button>
+              <button type="button" class="btn btn-secondary" id="errorLogBtn">
+                <i class="fas fa-exclamation-circle"></i> View Error Log
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script th:src="@{/admin.js}"></script>
+  <script>
+    // Additional JavaScript for the Settings page
+    document.addEventListener("DOMContentLoaded", () => {
+      // Settings tab navigation
+      const settingsTabs = document.querySelectorAll(".admin-settings-tab");
+      const settingsSections = document.querySelectorAll(".admin-settings-section");
+      
+      settingsTabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+          // Remove active class from all tabs and sections
+          settingsTabs.forEach(t => t.classList.remove("active"));
+          settingsSections.forEach(s => s.classList.remove("active"));
+          
+          // Add active class to clicked tab
+          tab.classList.add("active");
+          
+          // Show corresponding section
+          const tabId = tab.getAttribute("data-tab");
+          document.getElementById(`${tabId}-settings`).classList.add("active");
+        });
+      });
+      
+      // Reset to Default button functionality
+      const resetGeneralBtn = document.getElementById("resetGeneralBtn");
+      if (resetGeneralBtn) {
+        resetGeneralBtn.addEventListener("click", () => {
+          if (confirm("Are you sure you want to reset general settings to default values?")) {
+            alert("Settings have been reset to default values.");
+          }
+        });
+      }
+      
+      // Test Email button functionality
+      const testEmailBtn = document.getElementById("testEmailBtn");
+      if (testEmailBtn) {
+        testEmailBtn.addEventListener("click", () => {
+          alert("Test email sent to administrator email address.");
+        });
+      }
+      
+      // Add Integration button functionality
+      const addIntegrationBtn = document.getElementById("addIntegrationBtn");
+      if (addIntegrationBtn) {
+        addIntegrationBtn.addEventListener("click", () => {
+          alert("Add Integration functionality would be implemented here.");
+        });
+      }
+      
+      // Regenerate API Key button functionality
+      const regenerateApiKeyBtn = document.getElementById("regenerateApiKeyBtn");
+      if (regenerateApiKeyBtn) {
+        regenerateApiKeyBtn.addEventListener("click", () => {
+          if (confirm("Are you sure you want to regenerate your API key? This will invalidate the current key.")) {
+            document.getElementById("apiKey").value = "ag-api-" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            alert("API key has been regenerated.");
+          }
+        });
+      }
+      
+      // Create Backup button functionality
+      const createBackupBtn = document.getElementById("createBackupBtn");
+      if (createBackupBtn) {
+        createBackupBtn.addEventListener("click", () => {
+          alert("Creating backup... This may take a few minutes.");
+          setTimeout(() => {
+            alert("Backup created successfully!");
+          }, 3000);
+        });
+      }
+      
+      // Export Data button functionality
+      const exportDataBtn = document.getElementById("exportDataBtn");
+      if (exportDataBtn) {
+        exportDataBtn.addEventListener("click", () => {
+          const exportType = document.getElementById("exportType").value;
+          const exportFormat = document.getElementById("exportFormat").value;
+          alert(`Exporting ${exportType} data in ${exportFormat} format...`);
+        });
+      }
+      
+      // Reset System button functionality
+      const resetSystemBtn = document.getElementById("resetSystemBtn");
+      if (resetSystemBtn) {
+        resetSystemBtn.addEventListener("click", () => {
+          if (confirm("WARNING: This will reset your entire system to default settings. All data will be lost. This action cannot be undone. Are you absolutely sure?")) {
+            if (prompt("Type 'RESET' to confirm this action:") === "RESET") {
+              alert("System reset initiated. The application will restart shortly.");
+            }
+          }
+        });
+      }
+      
+      // PHP Info button functionality
+      const phpInfoBtn = document.getElementById("phpInfoBtn");
+      if (phpInfoBtn) {
+        phpInfoBtn.addEventListener("click", () => {
+          alert("PHP Info would be displayed in a new window or modal.");
+        });
+      }
+      
+      // Error Log button functionality
+      const errorLogBtn = document.getElementById("errorLogBtn");
+      if (errorLogBtn) {
+        errorLogBtn.addEventListener("click", () => {
+          alert("Error log would be displayed in a new window or modal.");
+        });
+      }
+      
+      // File upload input styling
+      const fileInputs = document.querySelectorAll('input[type="file"]');
+      fileInputs.forEach(input => {
+        const label = input.nextElementSibling;
+        const labelVal = label.innerHTML;
+        
+        input.addEventListener('change', function(e) {
+          let fileName = '';
+          if (this.files && this.files.length > 1) {
+            fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
+          } else {
+            fileName = e.target.value.split('\\').pop();
+          }
+          
+          if (fileName) {
+            label.querySelector('span').innerHTML = fileName;
+          } else {
+            label.innerHTML = labelVal;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

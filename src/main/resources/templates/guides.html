@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farming Guides & Resources - KrishiTech</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/guides.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <h1>KrishiTech</h1>
+                <span class="tagline">Smart Farming Solutions</span>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/guides}" class="active">Farming Guides</a></li>
+<!--                <li><a th:href="@{/machinery}">Machinery</a></li>-->
+                <li><a th:href="@{/weatherForecast}">Weather</a></li>
+                <li><a th:href="@{/marketForecast}">Market</a></li>
+                <!-- Show Profile Dropdown If User Is Logged In -->
+                <li class="dropdown" th:if="${session.userId}">
+                    <a href="#" class="dropbtn">Profile ▼</a>
+                    <ul class="dropdown-content">
+                        <li><a th:href="@{/profile}">View Profile</a></li>
+                        <li><a th:href="@{/settings}">Settings</a></li>
+                        <li><a th:href="@{/forum}">Community</a></li>
+                        <li><a th:href="@{/logout}">Logout</a></li>
+                    </ul>
+                </li>
+
+                <!-- Show Login Option If User Is NOT Logged In -->
+                <li th:if="${session.userId == null}">
+                    <a th:href="@{/login}">Login</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="guides-hero">
+        <div class="guides-hero-content">
+            <h1>Farming Guides & Resources</h1>
+            <p>Expert knowledge and practical advice to help you succeed in agriculture</p>
+            <div class="guides-search-container">
+                <input type="text" id="guidesSearch" placeholder="Search for guides...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </section>
+
+<section class="guides-featured">
+    <div class="container">
+        <h2>Featured Guides</h2>
+        <div class="featured-guides-container" th:if="${not #lists.isEmpty(featuredGuides)}">
+            <!-- Show if there are featured guides -->
+            <div class="featured-guide" th:each="fguide : ${featuredGuides}">
+                <!-- Image with fallback -->
+                <div class="featured-guide-image"
+                     th:style="${fguide.featuredImage != null} ? 
+                     'background-image: url(\'/uploads/farmguides/' + ${fguide.featuredImage} + '\')' : 
+                     'background-image: url(\'/images/default-guide.jpg\')'">
+                </div>
+                
+                <div class="featured-guide-content">
+                    <!-- Category with fallback -->
+                    <span class="guide-category" 
+                          th:text="${fguide.category != null} ? ${fguide.category} : 'General'">
+                    </span>
+                    
+                    <!-- Title (required field) -->
+                    <h3 th:text="${fguide.title}">Default Title</h3>
+                    
+                    <!-- Excerpt with fallback -->
+                    <p th:text="${fguide.excerpt != null} ? ${fguide.excerpt} : 'No excerpt available'"></p>
+                    
+                    <!-- Fixed URL to match controller -->
+                    <a th:href="@{'/guide/' + ${fguide.slug}}" class="btn btn-primary">Read Guide</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Show if no featured guides available -->
+        <div class="no-featured-guides" th:if="${#lists.isEmpty(featuredGuides)}">
+            <p>No featured guides available at this time.</p>
+        </div>
+    </div>
+</section>
+
+    <section class="guides-categories">
+        <div class="container">
+            <h2>Browse by Category</h2>
+            <div class="categories-container">
+                <a th:each="category : ${categories}" th:href="@{'#' + ${category.slug}}" class="category-card" >
+                    <div class="category-icon">
+                        <i th:class="${category.iconClass}"></i>
+                    </div>
+                    <h3 th:text="${category.name}">Category Name</h3>
+                    <p th:text="${category.description}">Category description</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section th:each="cat : ${categories}" th:id="${cat.slug}" class="guides-section">
+
+        <div class="container">
+            <div class="section-header">
+                <h2 th:text="${cat.name}"></h2>
+                <p th:text="${cat.description}"></p>
+            </div>
+            <div class="guides-filter" th:if="${!#lists.isEmpty(subcategoriesByCategory.get(cat.name))}">
+                <button class="filter-btn active" data-crop="all">All</button>
+                <button th:each="subcat : ${subcategoriesByCategory.get(cat.name)}"
+                        class="filter-btn"
+                        th:data-crop="${subcat}"
+                        th:text="${subcat}">
+                </button>
+            </div>
+
+
+            <div class="guides-grid">
+                <!-- Guides for this category -->
+                <div th:each="guide : ${guidesByCategory.get(cat.name)}" class="guide-card">
+                    <div class="guide-image"
+                         th:style="'background-image: url(\'/uploads/farmguides/' + ${guide.featuredImage} + '\')'"></div>
+                    <div class="guide-content">
+                        <span class="guide-category" th:text="${#strings.isEmpty(guide.subcategory) ? 'Guide' : guide.subcategory}"></span>
+                        <h3 th:text="${guide.title}"></h3>
+                        <div class="guide-meta">
+                            <span th:text="${guide.createdAt != null ? #temporals.format(guide.createdAt, 'MMMM d, yyyy') : 'Date not available'}"></span>
+<!--                            <span th:text="${guide.readTime} + ' read'"></span>-->
+                        </div>
+
+                        <p th:text="${guide.excerpt}"></p>
+                        <div class="guide-tags" th:if="${!#lists.isEmpty(guide.keywords)}">
+                            <span th:each="tag : ${guide.keywords.split(',')}" class="guide-tag" th:text="${tag}"></span>
+                        </div>
+                        <a th:href="@{'/guide/' + ${guide.slug}}" class="btn btn-primary">Read Guide</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!--    <section class="newsletter">-->
+<!--        <div class="container">-->
+<!--            <div class="newsletter-content">-->
+<!--                <h2>Stay Updated</h2>-->
+<!--                <p>Subscribe to our newsletter for the latest farming tips, weather alerts, and market updates.</p>-->
+<!--                <form id="newsletterForm" class="newsletter-form">-->
+<!--                    <input type="email" placeholder="Your email address" required>-->
+<!--                    <button type="submit" class="btn btn-primary">Subscribe</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2><i class="fas fa-leaf"></i> KrishiTech</h2>
+                <p>Smart Farming Solutions</p><br>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a th:href="@{/guides}">Farming Guides</a></li>
+                        <li><a th:href="@{/weatherForecast}">Weather Forecast</a></li>
+                        <li><a th:href="@{/marketForecast}">Market Price Forecast</a></li>
+                        <li><a th:href="@{/forum}">Community Forums</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</li>
+                        <li><i class="fas fa-phone"></i> 9800000000</li>
+                        <li><i class="fas fa-envelope"></i> KrishiTech@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/guides.js}"></script>
+</body>
+</html>

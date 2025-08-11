@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - KrishiTech</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body class="login-body">
+<div class="background-image"></div>
+
+<header>
+  <nav class="navbar">
+    <div class="logo">
+      <h1><i class="fas fa-leaf"></i> KrishiTech</h1>
+      <span class="tagline">Smart Farming Solutions</span>
+    </div>
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+    <ul class="nav-menu">
+      <li><a th:href="@{/}">Home</a></li>
+      <li><a th:href="@{/guides}">Farming Guides</a></li>
+      <!--      <li><a th:href="@{/machinery}">Machinery</a></li>-->
+      <li><a th:href="@{/weatherForecast}">Weather</a></li>
+      <li><a th:href="@{/marketForecast}">Market</a></li>
+      <li th:if="${session.userId == null}">
+        <a th:href="@{/login}" class="active">Login</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<div class="login-left-content">
+  <div class="welcome-text">
+    <h2>Welcome to KrishiTech</h2>
+    <p>Empowering farmers with smart agricultural solutions to maximize productivity and sustainability.</p>
+
+    <ul class="features-list">
+<!--      <li><i class="fas fa-check-circle"></i> Personalized farming recommendations</li>-->
+      <li><i class="fas fa-check-circle"></i> Real-time weather forecasts</li>
+      <li><i class="fas fa-check-circle"></i> Market price trends and analysis</li>
+      <li><i class="fas fa-check-circle"></i> Expert farming guides and tips</li>
+    </ul>
+  </div>
+</div>
+
+<div class="login-container">
+  <div class="login-form-container">
+    <h2>Sign In</h2>
+
+    <form id="LoginForm" class="login-form" th:action = "@{/login}" th:object="${user}" method="post" role="form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-with-icon">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" name="email" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-with-icon">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" name="password" required>
+        </div>
+      </div>
+
+      <div class="form-options">
+<!--        <div class="remember-me">-->
+<!--          <input type="checkbox" id="rememberMe" name="rememberMe">-->
+<!--          <label for="rememberMe">Remember me</label>-->
+<!--        </div>-->
+        <a href="#" class="forgot-password">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+
+      <a th:href="@{/register}" class="create-new-account">Create new Account</a>
+
+      <div th:if="${param.error}" class="error-message">
+        <p th:text="${param.error}" style="color: red">Invalid credentials!</p>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>

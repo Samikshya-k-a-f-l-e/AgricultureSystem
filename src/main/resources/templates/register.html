@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up - KrishiTech</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{admin.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="login-body">
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <h1><i class="fas fa-leaf"></i> KrishiTech</h1>
+            <span class="tagline">Smart Farming Solutions</span>
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <ul class="nav-menu">
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/guides}">Farming Guides</a></li>
+            <!--            <li><a th:href="@{/machinery}">Machinery</a></li>-->
+            <li><a th:href="@{/weatherForecast}">Weather</a></li>
+            <li><a th:href="@{/marketForecast}">Market</a></li>
+            <li th:if="${session.userId == null}">
+                <a th:href="@{/login}" class="active">Login</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="login-left-content">
+    <div class="welcome-text">
+        <h2>Join KrishiTech Today</h2>
+        <p>Become part of a growing community of farmers using technology to transform agriculture.</p>
+
+        <ul class="benefits-list">
+            <li><i class="fas fa-seedling"></i> Access farming guides</li>
+            <li><i class="fas fa-cloud-sun-rain"></i> Get accurate weather forecasts for your location</li>
+            <li><i class="fas fa-chart-line"></i> Stay updated with real-time market prices</li>
+            <li><i class="fas fa-book-open"></i> Learn from expert farming guides</li>
+            <li><i class="fas fa-users"></i> Connect with other farmers in your area</li>
+        </ul>
+
+    </div>
+</div>
+
+<div class="login-container">
+    <div class="login-form-container">
+        <h2>Sign Up</h2>
+
+        <form id="RegisterForm" class="login-form" th:action ="@{/register}" th:object="${user}" method="post" role="form">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="name" name="name" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="password" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+
+            <a th:href="@{/login}" class="create-new-account">Already have an Account?</a>
+
+            <div th:if="${param.error}" class="error-message">
+                <p th:text="${param.error}" style="color: red">Invalid credentials!</p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>

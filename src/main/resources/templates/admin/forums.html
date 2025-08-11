@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forums Management - KrishiTech Admin</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-header">
+      <div class="admin-sidebar-logo">
+        <h1>KrishiTech</h1>
+      </div>
+      <button class="admin-sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+
+    <nav class="admin-sidebar-menu">
+      <ul>
+        <li>
+          <a th:href="@{adminDashboard}">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{users}">
+            <i class="fas fa-users"></i>
+            <span>User Management</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{adminGuides}">
+            <i class="fas fa-book"></i>
+            <span>Farming Guides</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{forums}" class="active">
+            <i class="fas fa-comments"></i>
+            <span>Forums</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{marketData}">
+            <i class="fas fa-chart-line"></i>
+            <span>Market Data</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-content">
+    <header class="admin-header">
+      <div class="admin-header-title">
+        <h1>Forums Management</h1>
+        <div class="admin-header-breadcrumb">
+          <a href="dashboard.html">Home</a>
+          <span>/</span>
+          <span>Forums</span>
+        </div>
+      </div>
+
+      <div class="admin-header-actions">
+<!--        <div class="admin-search">-->
+<!--          <i class="fas fa-search"></i>-->
+<!--          <input type="text" placeholder="Search forums...">-->
+<!--        </div>-->
+
+        <div class="admin-user-menu" id="userMenu">
+          <button class="admin-user-button" id="userMenuButton">
+            <div class="admin-user-avatar">
+                <span th:text="${(session.userName.contains(' ') ?
+                (#strings.substring(session.userName, 0, 1) + #strings.substring(session.userName, session.userName.indexOf(' ') + 1, session.userName.indexOf(' ') + 2)):
+                (#strings.substring(session.userName, 0, 1))).toUpperCase()}"></span>
+            </div>
+            <div class="admin-user-info">
+              <div class="admin-user-name" th:text="${session.userName}"></div>
+              <div class="admin-user-role" th:text="${session.role}"></div>
+            </div>
+          </button>
+
+          <div class="admin-user-dropdown" id="userDropdown">
+            <ul>
+              <div class="admin-user-dropdown-divider"></div>
+              <li>
+                <a th:href="@{/adminLogout}">
+                  <i class="fas fa-sign-out-alt"></i>
+                  Logout
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Forum Categories Section -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h3 class="admin-card-title">Forum Categories</h3>
+        <div class="admin-card-actions">
+          <button class="btn btn-primary" id="addCategoryBtn">
+            <i class="fas fa-plus"></i> Add Category
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+          <tr>
+            <th>Category Name</th>
+            <th>Description</th>
+            <th>Topics</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="category : ${fcategories}">
+            <td  th:text="${category.name}"></td>
+            <td  th:text="${category.description}"></td>
+            <td th:text="${category.topicsCount}"></td>
+            <td><span class="admin-status" th:classappend="${category.status == 'on'} ? ' active' : ' inactive'"
+                      th:text="${category.status == 'on'} ? 'Active' : 'Inactive'"></span></td>
+            <td>
+              <div class="admin-table-actions">
+                <button th:onclick="'editCategory(' + ${category.id} + ')'" class="admin-table-action edit">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button th:onclick="'deleteCategory(' + ${category.id} + ')'" class="admin-table-action delete">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+
+              </div>
+            </td>
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Recent Forum Topics Section -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <h3 class="admin-card-title">Recent Topics</h3>
+        <div class="admin-card-actions">
+          <select class="admin-select" id="categoryFilter">
+            <option value="all">All Categories</option>
+            <option value="crop-farming">Crop Farming</option>
+            <option value="livestock">Livestock</option>
+            <option value="equipment">Equipment & Machinery</option>
+            <option value="sustainable">Sustainable Practices</option>
+            <option value="market">Market & Economics</option>
+            <option value="general">General Discussion</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+          <tr>
+            <th>Topic Title</th>
+            <th>Category</th>
+            <th>Author</th>
+            <th>Replies</th>
+            <th>Last Activity</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="topic : ${topicsPage}">
+            <td th:text="${topic.title}">Title</td>
+            <td th:text="${topic.category.name}"></td>
+            <td th:text="${topic.author.name}"></td>
+            <td th:text="${topic.replyCount}"></td>
+            <td th:text="${#temporals.format(topic.updatedAt, 'MMMM dd, yyyy')}"></td>
+            <td><span class="admin-status active" th:text="${topic.status}"></span></td>
+            <td>
+              <div class="admin-table-actions">
+                <button class="admin-table-action">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="admin-table-action">
+                  <i class="fas fa-lock"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="admin-pagination" th:if="${topicsPage.totalPages > 1}">
+        <div class="admin-pagination-info">
+          Showing <span th:text="${topicsPage.number * topicsPage.size + 1}">1</span>
+          to <span th:text="${(topicsPage.number * topicsPage.size) + topicsPage.numberOfElements}">7</span>
+          of <span th:text="${topicsPage.totalElements}">245</span> entries
+        </div>
+        <div class="admin-pagination-buttons">
+          <!-- Previous Button -->
+          <button th:if="${!topicsPage.first}"
+                  class="admin-pagination-button"
+                  onclick="window.location.href='/forums?page=${topicsPage.number - 1}&size=${topicsPage.size}'">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <!-- Current Page -->
+          <button class="admin-pagination-button active"
+                  th:text="${topicsPage.number + 1}">1</button>
+
+          <!-- Next Button -->
+          <button th:if="${!topicsPage.last}"
+                  class="admin-pagination-button"
+                  onclick="window.location.href='/forums?page=${topicsPage.number + 1}&size=${topicsPage.size}'">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+<!--  forum categrory adding modal-->
+<div id="addCategoryModal" class="admin-modal">
+  <div class="admin-modal-content">
+    <div class="admin-modal-header">
+      <h3>Add new Forum Categories</h3>
+      <button class="admin-modal-close">&times;</button>
+    </div>
+    <div class="admin-modal-body">
+      <form id="addCategoryForm" th:action ="@{/addForumCategory}" method="post" th:object="${forum}">
+        <div class="admin-form-group">
+          <label for="forumName">Category Name</label>
+          <input type="text" id="forumName" name="name" required>
+        </div>
+        <div class="admin-form-group">
+          <label for="forumDescription">Description</label>
+          <textarea id="forumDescription" rows="3" name="description"></textarea>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-switch">
+            <input type="checkbox" id="forumStatus" name="status">
+            <span class="admin-slider round"></span>
+          </label>
+        </div>
+        <input type="hidden" id="editId" name="id">
+        <div class="admin-form-actions">
+          <button type="reset" class="btn btn-secondary">Clear</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:src="@{/admin.js}"></script>
+<script>
+  // Additional JavaScript for the Forums page
+  document.addEventListener("DOMContentLoaded", () => {
+    // Initialize the forum activity chart if it exists
+    const forumActivityChart = document.getElementById("forumActivityChart");
+
+    if (forumActivityChart) {
+      new Chart(forumActivityChart, {
+        type: "bar",
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+          datasets: [
+            {
+              label: "Topics",
+              data: [45, 52, 68, 75, 92, 108],
+              backgroundColor: "#4caf50",
+            },
+            {
+              label: "Posts",
+              data: [210, 245, 320, 380, 450, 520],
+              backgroundColor: "#ff9800",
+            }
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: "top",
+            },
+            tooltip: {
+              mode: "index",
+              intersect: false,
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                drawBorder: false,
+              },
+            },
+            x: {
+              grid: {
+                display: false,
+              },
+            },
+          },
+        },
+      });
+    }
+  });
+
+  const modal = document.getElementById('addCategoryModal');
+  const closeButtons = document.querySelectorAll('.admin-modal-close');
+
+  if (addCategoryBtn && modal) {
+    addCategoryBtn.addEventListener('click', () => {
+      modal.style.display = 'block';
+    });
+
+    closeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+
+    document.getElementById('categoryStatus')?.addEventListener('change', function() {
+      const statusText = this.parentElement.querySelector('.admin-status-text');
+      if (this.checked) {
+        statusText.textContent = 'Active';
+        statusText.classList.remove('inactive');
+        statusText.classList.add('active');
+      } else {
+        statusText.textContent = 'Inactive';
+        statusText.classList.remove('active');
+        statusText.classList.add('inactive');
+      }
+    });
+  }
+
+  function deleteCategory(id) {
+    if (confirm("Are you sure you want to delete this category?")) {
+      fetch(`/deleteForumCategory/${id}`, { method: 'DELETE' })
+              .then(res => {
+                if (!res.ok) {
+                  return res.text().then(text => { throw new Error(text); });
+                }
+                location.reload();
+              })
+              .catch(err => alert(err.message));
+    }
+  }
+
+  function editCategory(id) {
+    document.querySelector('#addCategoryModal h3').textContent = 'Update Guide Category';
+
+    fetch(`/getForumCategory/${id}`)
+            .then(res => res.json())
+            .then(data => {
+              document.getElementById('forumName').value = data.name;
+              document.getElementById('forumDescription').value = data.description;
+              document.getElementById('forumStatus').checked = data.status === 'on';
+              document.getElementById('editId').value = data.id;
+
+              const form = document.getElementById('addCategoryForm');
+              form.action = `/updateForumCategory/${id}`;
+
+              document.getElementById('addCategoryModal').style.display = 'block';
+            })
+            .catch(err => alert("Failed to load category: " + err));
+  }
+
+  // Category filter functionality
+  const categoryFilter = document.getElementById("categoryFilter");
+  if (categoryFilter) {
+    categoryFilter.addEventListener("change", () => {
+      // In a real application, this would filter the topics table
+      const selectedCategory = categoryFilter.value;
+      alert(`Filtering by category: ${selectedCategory}`);
+    });
+  }
+
+  // Forum settings form submission
+  const forumSettingsForm = document.querySelector(".admin-form");
+  if (forumSettingsForm) {
+    forumSettingsForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      // In a real application, this would save the settings to the server
+      alert("Forum settings saved successfully!");
+    });
+  }
+
+</script>
+</body>
+</html>

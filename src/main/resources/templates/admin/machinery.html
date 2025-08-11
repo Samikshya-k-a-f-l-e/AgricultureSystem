@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Machinery Listings - KrishiTech Admin</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-header">
+        <div class="admin-sidebar-logo">
+          <h1>KrishiTech</h1>
+        </div>
+        <button class="admin-sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <nav class="admin-sidebar-menu">
+        <ul>
+          <li>
+            <a th:href="@{adminDashboard}" >
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{users}">
+              <i class="fas fa-users"></i>
+              <span>User Management</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{content}">
+              <i class="fas fa-file-alt"></i>
+              <span>Content Management</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{adminGuides}">
+              <i class="fas fa-book"></i>
+              <span>Farming Guides</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{forums}">
+              <i class="fas fa-comments"></i>
+              <span>Forums</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{marketData}">
+              <i class="fas fa-chart-line"></i>
+              <span>Market Data</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{adminMachinery}" class="active">
+              <i class="fas fa-tractor"></i>
+              <span>Machinery Listings</span>
+            </a>
+          </li>
+        </ul>
+
+<!--        <div class="admin-sidebar-divider"></div>-->
+
+<!--        <ul>-->
+<!--          <li>-->
+<!--            <a href="analytics.html">-->
+<!--              <i class="fas fa-chart-bar"></i>-->
+<!--              <span>Analytics</span>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--          <li>-->
+<!--            <a th:href="@{settings}">-->
+<!--              <i class="fas fa-cog"></i>-->
+<!--              <span>Settings</span>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--        </ul>-->
+      </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="admin-content">
+      <!-- Header -->
+      <header class="admin-header">
+        <div class="admin-header-title">
+          <h1>Machinery Listings</h1>
+          <div class="admin-header-breadcrumb">
+            <a href="dashboard.html">Home</a>
+            <span>/</span>
+            <span>Machinery Listings</span>
+          </div>
+        </div>
+        
+        <div class="admin-header-actions">
+<!--          <div class="admin-search">-->
+<!--            <i class="fas fa-search"></i>-->
+<!--            <input type="text" placeholder="Search machinery...">-->
+<!--          </div>-->
+          
+          <div class="admin-user-menu" id="userMenu">
+            <button class="admin-user-button" id="userMenuButton">
+              <div class="admin-user-avatar">
+                <span th:text="${(session.userName.contains(' ') ?
+                (#strings.substring(session.userName, 0, 1) + #strings.substring(session.userName, session.userName.indexOf(' ') + 1, session.userName.indexOf(' ') + 2)):
+                (#strings.substring(session.userName, 0, 1))).toUpperCase()}"></span>
+              </div>
+              <div class="admin-user-info">
+                <div class="admin-user-name" th:text="${session.userName}"></div>
+                <div class="admin-user-role" th:text="${session.role}"></div>
+              </div>
+            </button>
+            
+            <div class="admin-user-dropdown" id="userDropdown">
+              <ul>
+                <div class="admin-user-dropdown-divider"></div>
+                <li>
+                  <a th:href="@{/adminLogout}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Machinery Dashboard -->
+      <div class="admin-dashboard-grid">
+        <!-- Machinery Statistics -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">Machinery Statistics</h3>
+          </div>
+          
+          <div class="admin-stat-grid">
+            <div class="admin-stat-card">
+              <div class="admin-stat-icon primary">
+                <i class="fas fa-tractor"></i>
+              </div>
+              <div class="admin-stat-content">
+                <h3 class="admin-stat-value">248</h3>
+                <p class="admin-stat-label">Active Listings</p>
+                <div class="admin-stat-change positive">
+                  <i class="fas fa-arrow-up"></i>
+                  <span>12% from last month</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="admin-stat-card">
+              <div class="admin-stat-icon success">
+                <i class="fas fa-tags"></i>
+              </div>
+              <div class="admin-stat-content">
+                <h3 class="admin-stat-value">42</h3>
+                <p class="admin-stat-label">Sold This Month</p>
+                <div class="admin-stat-change positive">
+                  <i class="fas fa-arrow-up"></i>
+                  <span>8% from last month</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="admin-stat-card">
+              <div class="admin-stat-icon warning">
+                <i class="fas fa-eye"></i>
+              </div>
+              <div class="admin-stat-content">
+                <h3 class="admin-stat-value">5,842</h3>
+                <p class="admin-stat-label">Total Views</p>
+                <div class="admin-stat-change positive">
+                  <i class="fas fa-arrow-up"></i>
+                  <span>15% from last month</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="admin-stat-card">
+              <div class="admin-stat-icon info">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+              <div class="admin-stat-content">
+                <h3 class="admin-stat-value">$1.2M</h3>
+                <p class="admin-stat-label">Est. Value</p>
+                <div class="admin-stat-change positive">
+                  <i class="fas fa-arrow-up"></i>
+                  <span>5% from last month</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Listing Activity Chart -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">Listing Activity</h3>
+            <div class="admin-card-actions">
+              <select class="admin-select" id="activityTimeframe">
+                <option value="week">Last Week</option>
+                <option value="month" selected>Last Month</option>
+                <option value="quarter">Last Quarter</option>
+                <option value="year">Last Year</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="admin-chart-container" id="listingActivityChart">
+            <!-- Chart will be rendered here by JavaScript -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- Machinery Categories Section -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3 class="admin-card-title">Machinery Categories</h3>
+          <div class="admin-card-actions">
+            <button class="btn btn-primary" id="addCategoryBtn">
+              <i class="fas fa-plus"></i> Add Category
+            </button>
+          </div>
+        </div>
+        
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Category Name</th>
+                <th>Description</th>
+                <th>Listings</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tractors</td>
+                <td>Farm tractors of all sizes and types</td>
+                <td>78</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Harvesters</td>
+                <td>Combine harvesters and specialized harvesting equipment</td>
+                <td>42</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Planting Equipment</td>
+                <td>Seeders, planters, and related equipment</td>
+                <td>35</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Tillage Equipment</td>
+                <td>Plows, cultivators, and soil preparation tools</td>
+                <td>29</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Irrigation Systems</td>
+                <td>Sprinklers, drip systems, and water management</td>
+                <td>24</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Livestock Equipment</td>
+                <td>Feeding, housing, and handling equipment</td>
+                <td>18</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Hay & Forage</td>
+                <td>Balers, mowers, and forage harvesters</td>
+                <td>22</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Machinery Listings Section -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3 class="admin-card-title">Machinery Listings</h3>
+          <div class="admin-card-actions">
+            <button class="btn btn-secondary" id="filterListingsBtn">
+              <i class="fas fa-filter"></i> Filter
+            </button>
+            <button class="btn btn-primary" id="addListingBtn">
+              <i class="fas fa-plus"></i> Add Listing
+            </button>
+          </div>
+        </div>
+        
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Listing Title</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Seller</th>
+                <th>Location</th>
+                <th>Listed Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2023 John Deere 8R 410 Tractor</td>
+                <td>Tractors</td>
+                <td>$425,000</td>
+                <td>Midwest Farm Equipment</td>
+                <td>Des Moines, IA</td>
+                <td>June 15, 2025</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-star"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>2022 Case IH 9250 Combine Harvester</td>
+                <td>Harvesters</td>
+                <td>$380,000</td>
+                <td>Eastern Ag Solutions</td>
+                <td>Columbus, OH</td>
+                <td>June 12, 2025</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-star"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Valley 8000 Series Center Pivot Irrigation</td>
+                <td>Irrigation Systems</td>
+                <td>$75,000</td>
+                <td>Western Water Solutions</td>
+                <td>Fresno, CA</td>
+                <td>June 10, 2025</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-star"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>2021 New Holland T7.315 Tractor</td>
+                <td>Tractors</td>
+                <td>$210,000</td>
+                <td>Robert Wilson</td>
+                <td>Lincoln, NE</td>
+                <td>June 8, 2025</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-star-half-alt"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>John Deere 1775NT 24-Row Planter</td>
+                <td>Planting Equipment</td>
+                <td>$185,000</td>
+                <td>Midwest Farm Equipment</td>
+                <td>Des Moines, IA</td>
+                <td>June 5, 2025</td>
+                <td><span class="admin-status active">Active</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-star"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>2020 Kubota M7-172 Tractor</td>
+                <td>Tractors</td>
+                <td>$95,000</td>
+                <td>Southern Farm Supply</td>
+                <td>Atlanta, GA</td>
+                <td>June 3, 2025</td>
+                <td><span class="admin-status pending">Pending Review</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Vermeer 605N Baler</td>
+                <td>Hay & Forage</td>
+                <td>$45,000</td>
+                <td>Emily Davis</td>
+                <td>Topeka, KS</td>
+                <td>June 1, 2025</td>
+                <td><span class="admin-status inactive">Sold</span></td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="admin-pagination">
+          <div class="admin-pagination-info">
+            Showing 1 to 7 of 248 entries
+          </div>
+          <div class="admin-pagination-buttons">
+            <button class="admin-pagination-button" disabled>
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="admin-pagination-button active">1</button>
+            <button class="admin-pagination-button">2</button>
+            <button class="admin-pagination-button">3</button>
+            <button class="admin-pagination-button">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Featured Listings Section -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3 class="admin-card-title">Featured Listings</h3>
+          <div class="admin-card-actions">
+            <button class="btn btn-primary" id="manageFeaturedBtn">
+              <i class="fas fa-star"></i> Manage Featured
+            </button>
+          </div>
+        </div>
+        
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Listing Title</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Position</th>
+                <th>Featured Until</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2023 John Deere 8R 410 Tractor</td>
+                <td>Tractors</td>
+                <td>$425,000</td>
+                <td>1</td>
+                <td>July 15, 2025</td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action">
+                      <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <button class="admin-table-action" disabled>
+                      <i class="fas fa-arrow-down"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-calendar-alt"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>2022 Case IH 9250 Combine Harvester</td>
+                <td>Harvesters</td>
+                <td>$380,000</td>
+                <td>2</td>
+                <td>July 12, 2025</td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action">
+                      <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-arrow-down"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-calendar-alt"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>John Deere 1775NT 24-Row Planter</td>
+                <td>Planting Equipment</td>
+                <td>$185,000</td>
+                <td>3</td>
+                <td>July 5, 2025</td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action">
+                      <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-arrow-down"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-calendar-alt"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Valley 8000 Series Center Pivot Irrigation</td>
+                <td>Irrigation Systems</td>
+                <td>$75,000</td>
+                <td>4</td>
+                <td>July 10, 2025</td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action">
+                      <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <button class="admin-table-action" disabled>
+                      <i class="fas fa-arrow-down"></i>
+                    </button>
+                    <button class="admin-table-action">
+                      <i class="fas fa-calendar-alt"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Listing Verification Queue -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3 class="admin-card-title">Verification Queue</h3>
+          <div class="admin-card-actions">
+            <button class="btn btn-primary" id="verifyAllBtn">
+              <i class="fas fa-check-double"></i> Verify All
+            </button>
+          </div>
+        </div>
+        
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Listing Title</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Seller</th>
+                <th>Submitted</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2020 Kubota M7-172 Tractor</td>
+                <td>Tractors</td>
+                <td>$95,000</td>
+                <td>Southern Farm Supply</td>
+                <td>June 3, 2025</td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-ban"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>2019 Massey Ferguson 8737 Tractor</td>
+                <td>Tractors</td>
+                <td>$120,000</td>
+                <td>Thomas Clark</td>
+                <td>June 2, 2025</td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-ban"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Kuhn Knight 8124 Manure Spreader</td>
+                <td>Livestock Equipment</td>
+                <td>$28,500</td>
+                <td>Jennifer Lee</td>
+                <td>June 1, 2025</td>
+                <td>
+                  <div class="admin-table-actions">
+                    <button class="admin-table-action">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="admin-table-action edit">
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button class="admin-table-action delete">
+                      <i class="fas fa-ban"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Listing Settings Section -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3 class="admin-card-title">Listing Settings</h3>
+        </div>
+        
+        <form class="admin-form">
+          <div class="admin-form-group">
+            <label for="listingDuration">Default Listing Duration (days)</label>
+            <input type="number" id="listingDuration" name="listingDuration" value="30">
+          </div>
+          
+          <div class="admin-form-group">
+            <label for="featuredDuration">Featured Listing Duration (days)</label>
+            <input type="number" id="featuredDuration" name="featuredDuration" value="14">
+          </div>
+          
+          <div class="admin-form-group">
+            <label for="maxImages">Maximum Images Per Listing</label>
+            <input type="number" id="maxImages" name="maxImages" value="10">
+          </div>
+          
+          <div class="admin-form-group">
+            <label for="verificationRequired">Verification Required</label>
+            <select id="verificationRequired" name="verificationRequired">
+              <option value="all" selected>All Listings</option>
+              <option value="new-sellers">New Sellers Only</option>
+              <option value="high-value">High Value Items Only</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+          
+          <div class="admin-form-group">
+            <label for="allowedFileTypes">Allowed Image Types</label>
+            <input type="text" id="allowedFileTypes" name="allowedFileTypes" value="jpg, jpeg, png, gif">
+          </div>
+          
+          <div class="admin-form-actions">
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script th:src="@{/admin.js}"></script>
+  <script>
+    // Additional JavaScript for the Machinery page
+    document.addEventListener("DOMContentLoaded", () => {
+      // Initialize the listing activity chart if it exists
+      const listingActivityChart = document.getElementById("listingActivityChart");
+      
+      if (listingActivityChart) {
+        new Chart(listingActivityChart, {
+          type: "bar",
+          data: {
+            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+            datasets: [
+              {
+                label: "New Listings",
+                data: [24, 32, 28, 35],
+                backgroundColor: "#4caf50",
+              },
+              {
+                label: "Sold Items",
+                data: [8, 12, 10, 14],
+                backgroundColor: "#ff9800",
+              },
+              {
+                label: "Expired Listings",
+                data: [5, 3, 6, 4],
+                backgroundColor: "#f44336",
+              }
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              tooltip: {
+                mode: "index",
+                intersect: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  drawBorder: false,
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+          },
+        });
+      }
+      
+      // Add Category button functionality
+      const addCategoryBtn = document.getElementById("addCategoryBtn");
+      if (addCategoryBtn) {
+        addCategoryBtn.addEventListener("click", () => {
+          // In a real application, this would open a modal or redirect to a form
+          alert("Add Category functionality would be implemented here");
+        });
+      }
+      
+      // Add Listing button functionality
+      const addListingBtn = document.getElementById("addListingBtn");
+      if (addListingBtn) {
+        addListingBtn.addEventListener("click", () => {
+          // In a real application, this would open a form to add a new listing
+          alert("Add Machinery Listing functionality would be implemented here");
+        });
+      }
+      
+      // Filter Listings button functionality
+      const filterListingsBtn = document.getElementById("filterListingsBtn");
+      if (filterListingsBtn) {
+        filterListingsBtn.addEventListener("click", () => {
+          // In a real application, this would open a filter panel
+          alert("Filter Listings functionality would be implemented here");
+        });
+      }
+      
+      // Manage Featured button functionality
+      const manageFeaturedBtn = document.getElementById("manageFeaturedBtn");
+      if (manageFeaturedBtn) {
+        manageFeaturedBtn.addEventListener("click", () => {
+          // In a real application, this would open a management interface
+          alert("Manage Featured Listings functionality would be implemented here");
+        });
+      }
+      
+      // Verify All button functionality
+      const verifyAllBtn = document.getElementById("verifyAllBtn");
+      if (verifyAllBtn) {
+        verifyAllBtn.addEventListener("click", () => {
+          // In a real application, this would process all items in the verification queue
+          alert("Verify All functionality would be implemented here");
+        });
+      }
+      
+      // Activity timeframe selector functionality
+      const activityTimeframe = document.getElementById("activityTimeframe");
+      if (activityTimeframe) {
+        activityTimeframe.addEventListener("change", () => {
+          // In a real application, this would update the chart with new data
+          const selectedTimeframe = activityTimeframe.value;
+          alert(`Changing timeframe to: ${selectedTimeframe}`);
+        });
+      }
+      
+      // Listing settings form submission
+      const listingSettingsForm = document.querySelector(".admin-form");
+      if (listingSettingsForm) {
+        listingSettingsForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          // In a real application, this would save the settings to the server
+          alert("Listing settings saved successfully!");
+        });
+      }
+      
+      // Star/Feature buttons
+      const starButtons = document.querySelectorAll(".admin-table-action i.fa-star, .admin-table-action i.fa-star-half-alt");
+      if (starButtons.length > 0) {
+        starButtons.forEach((button) => {
+          button.parentElement.addEventListener("click", function() {
+            const listing = this.closest("tr").querySelector("td:first-child").textContent;
+            alert(`Featuring listing: ${listing}`);
+          });
+        });
+      }
+      
+      // Calendar buttons for featured listings
+      const calendarButtons = document.querySelectorAll(".admin-table-action i.fa-calendar-alt");
+      if (calendarButtons.length > 0) {
+        calendarButtons.forEach((button) => {
+          button.parentElement.addEventListener("click", function() {
+            const listing = this.closest("tr").querySelector("td:first-child").textContent;
+            alert(`Extending featured period for: ${listing}`);
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

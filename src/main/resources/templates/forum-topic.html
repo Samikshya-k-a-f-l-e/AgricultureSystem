@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Community Forums - KrishiTech</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/forum.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <h1>KrishiTech</h1>
+            <span class="tagline">Smart Farming Solutions</span>
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <ul class="nav-menu">
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/guides}">Farming Guides</a></li>
+            <!--                <li><a th:href="@{/machinery}">Machinery</a></li>-->
+            <li><a th:href="@{/weatherForecast}">Weather</a></li>
+            <li><a th:href="@{/marketForecast}">Market</a></li>
+            <li class="dropdown" th:if="${session.userId}">
+                <a href="#" class="dropbtn">Profile ▼</a>
+                <ul class="dropdown-content">
+                    <li><a th:href="@{/profile}">View Profile</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a th:href="@{/forum}" class="active">Community</a></li>
+                    <li><a th:href="@{/logout}">Logout</a></li>
+                </ul>
+            </li>
+
+            <li th:if="${session.userId == null}">
+                <a th:href="@{/login}">Login</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="topic-container">
+    <div class="topic-breadcrumbs">
+        <a th:href="@{/forum}">Forums</a> &gt;
+        <span th:text="${forumTopic.category.name}"></span> &gt;
+        <span th:text="${forumTopic.title}"></span>
+    </div>
+
+    <div class="topic-header">
+        <h1 th:text="${forumTopic.title}"></h1>
+        <div class="topic-meta">
+            <span class="topic-category" th:text="${forumTopic.category.name}"></span>
+        </div>
+        <div class="topic-tags" th:if="${!#lists.isEmpty(forumTopic.tags)}">
+            <span th:each="tag : ${forumTopic.tags.split(',')}" class="topic-tag" th:text="${tag}"></span>
+        </div>
+    </div>
+
+    <div class="topic-actions">
+        <a href="#reply"><button class="btn btn-primary" id="replyTopicBtn"><i class="fas fa-reply"></i> Reply</button></a>
+    </div>
+
+    <div class="post original-post">
+        <div class="post-sidebar">
+            <div class="user-info">
+                <div class="user-name" th:text="${forumTopic.author.name}"></div>
+                <div class="user-stats">
+                    <span><i class="fas fa-calendar-alt"></i><span>Joined: </span> <span th:text="${#temporals.format(forumTopic.author.joinedDate, 'MMMM, yyyy')}"></span></span>
+                </div>
+            </div>
+        </div>
+        <div class="post-content">
+            <div class="post-header">
+                <span class="post-date">Posted on <span th:text="${#temporals.format(forumTopic.createdAt, 'MMMM dd, yyyy')}"></span> at     <span th:text="${#temporals.format(forumTopic.createdAt, 'hh:mm a')}"></span></span>
+            </div>
+            <div class="post-body">
+                <p th:text="${forumTopic.content}"></p>
+            </div>
+            <div class="post-footer">
+                <div class="post-reactions">
+                    <button class="reaction-btn" data-reaction-type="like" th:data-topic-id="${forumTopic.id}" th:data-reply-id="0" onclick="handleReaction(this)">
+                        <i class="fas fa-thumbs-up"></i>
+                        <span class="count" th:text="${topicReactionCounts['like'] ?: 0}">0</span>
+                    </button>
+                    <button class="reaction-btn" data-reaction-type="love" th:data-topic-id="${forumTopic.id}" th:data-reply-id="0" onclick="handleReaction(this)">
+                        <i class="fas fa-heart"></i>
+                        <span class="count" th:text="${topicReactionCounts['love'] ?: 0}">0</span>                    </button>
+                    <button class="reaction-btn" data-reaction-type="insightful" th:data-topic-id="${forumTopic.id}" th:data-reply-id="0" onclick="handleReaction(this)">
+                        <i class="fas fa-lightbulb"></i>
+                        <span class="count" th:text="${topicReactionCounts['insightful'] ?: 0}">0</span>                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-replies">
+        <div class="post" th:each="reply : ${repliesPage}">
+            <div class="post-sidebar">
+                <div class="user-info">
+                    <div class="user-name" th:text="${reply.user.name}"></div>
+                    <div class="user-stats">
+                        <span><i class="fas fa-calendar-alt"></i> Joined: <span th:text="${#temporals.format(reply.user.joinedDate, 'MMM yyyy')}"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="post-content">
+                <div style="display: flex;justify-content: space-between;">
+                <div class="post-header">
+                    <span class="post-date">Posted on  <span th:text="${#temporals.format(reply.createdAt, 'MMM dd, yyyy')}"></span> at
+                    <span th:text="${#temporals.format(reply.createdAt, 'hh:mm a')}"></span></span>
+                </div>
+                <div class="admin-table-actions" th:if="${session.userId == reply.user.id}">
+                    <button th:onclick="'deleteReply(' + ${reply.id} + ')'" class="admin-table-action delete">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+                </div>
+                <div class="post-body">
+                    <p th:text="${reply.content}"></p>
+                </div>
+                <div class="post-footer">
+                    <div class="post-reactions">
+                        <button class="reaction-btn" data-reaction-type="like" th:data-topic-id="0" th:data-reply-id="${reply.id}" onclick="handleReaction(this)">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span class="count" th:text="${replyReactionCounts[reply.id]?.get('like') ?: 0}">0</span>                        </button>
+                        <button class="reaction-btn" data-reaction-type="love" th:data-topic-id="0" th:data-reply-id="${reply.id}" onclick="handleReaction(this)">
+                            <i class="fas fa-heart"></i>
+                            <span class="count" th:text="${replyReactionCounts[reply.id]?.get('love') ?: 0}">0</span>                        </button>
+                        <button class="reaction-btn" data-reaction-type="insightful" th:data-topic-id="0" th:data-reply-id="${reply.id}" onclick="handleReaction(this)">
+                            <i class="fas fa-lightbulb"></i>
+                            <span class="count" th:text="${replyReactionCounts[reply.id]?.get('insightful') ?: 0}">0</span>                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="load-more" th:if="${repliesPage.totalPages > 1}">
+            <button class="btn btn-secondary"
+                    th:if="${!repliesPage.isLast()}"
+                    onclick="loadMoreReplies()">Load More Replies</button>
+            <span th:text="'Showing ' + ${repliesPage.number * repliesPage.size + repliesPage.numberOfElements} + ' of ' + ${repliesPage.totalElements} + ' replies'">
+            Showing X of Y replies
+        </span>
+        </div>
+
+        <div class="no-replies" th:if="${repliesPage.totalElements == 0}">
+            <p>No replies yet. Be the first to reply!</p>
+        </div>
+    </div>
+
+    <section id="reply">
+        <div style="padding: 3rem"></div>
+    <div class="reply-box" id="replyBox">
+        <h3>Post a Reply</h3>
+        <form id="replyForm">
+            <div class="form-group">
+                <textarea id="replyContent" name="replyContent" rows="6" placeholder="Share your thoughts or experiences..." required></textarea>
+            </div>
+            <input type="hidden" id="topicId" th:value="${forumTopic.id}" />
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="notifyReplies" name="notifyReplies" checked hidden="hidden">
+<!--                    Notify me of new replies-->
+                </label>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="cancelReply">Cancel</button>
+                <button type="submit" class="btn btn-primary" >Post Reply</button>
+            </div>
+        </form>
+    </div>
+    </section>
+</div>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-logo">
+            <h2><i class="fas fa-leaf"></i> KrishiTech</h2>
+            <p>Smart Farming Solutions</p><br>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-links">
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a th:href="@{/guides}">Farming Guides</a></li>
+                    <li><a th:href="@{/weatherForecast}">Weather Forecast</a></li>
+                    <li><a th:href="@{/marketForecast}">Market Price Forecast</a></li>
+                    <li><a th:href="@{/forum}">Community Forums</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</li>
+                    <li><i class="fas fa-phone"></i> 9800000000</li>
+                    <li><i class="fas fa-envelope"></i> KrishiTech@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script th:src="@{/js/forum.js}"></script>
+</body>
+</html>

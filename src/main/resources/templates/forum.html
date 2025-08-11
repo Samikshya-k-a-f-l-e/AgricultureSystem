@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Community Forums - KrishiTech</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/forum.css}" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <h1>KrishiTech</h1>
+                <span class="tagline">Smart Farming Solutions</span>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-menu">
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/guides}">Farming Guides</a></li>
+<!--                <li><a th:href="@{/machinery}">Machinery</a></li>-->
+                <li><a th:href="@{/weatherForecast}">Weather</a></li>
+                <li><a th:href="@{/marketForecast}">Market</a></li>
+                <!-- Show Profile Dropdown If User Is Logged In -->
+                <li class="dropdown" th:if="${session.userId}">
+                    <a href="#" class="dropbtn">Profile ▼</a>
+                    <ul class="dropdown-content">
+                        <li><a th:href="@{/profile}">View Profile</a></li>
+                        <li><a th:href="@{/settings}">Settings</a></li>
+                        <li><a th:href="@{/forum}" class="active">Community</a></li>
+                        <li><a th:href="@{/logout}">Logout</a></li>
+                    </ul>
+                </li>
+
+                <!-- Show Login Option If User Is NOT Logged In -->
+                <li th:if="${session.userId == null}">
+                    <a th:href="@{/login}">Login</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="forum-hero">
+        <div class="forum-hero-content">
+            <h1>Farmer Community Forums</h1>
+            <p>Connect, share knowledge, and learn from farmers around the world</p>
+            <div class="forum-search-container">
+                <input type="text" id="forumSearch" placeholder="Search discussions...">
+                <button id="searchButton"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section class="forum-main">
+        <div class="container">
+
+            <h2 class="section-title">Community Forum</h2>
+            <div class="forum-actions">
+                <button id="new-topic-btn" class="btn btn-primary">Start New Topic</button>
+            </div>
+
+            <div class="forum-categories">
+                <div class="category-tab active" data-category="all">All Discussions</div>
+
+                <div th:each="category : ${fcategories}" th:if="${category.status == 'on'}"
+                     class="category-tab"
+                     th:attr="data-category=${#strings.replace(category.name.toLowerCase(), ' ', '-')}"
+                     th:text="${category.name}">
+                </div>
+            </div>
+
+            <div class="forum-topics">
+                <div class="topic-card" th:each="topic : ${topicsPage.content}">
+                    <a th:href="@{'/forum/' + ${topic.slug}}">
+                    <div class="topic-info">
+                        <h3 th:text="${topic.title}"></h3>
+                        <div class="topic-meta">
+                            <span class="author"><i class="fas fa-user"></i><span th:text="${topic.author.name}"></span></span>
+                            <span class="date"><i class="fas fa-calendar"></i>
+                                <span th:text="${#temporals.format(topic.updatedAt, 'MMMM dd, yyyy')}">Date</span></span>
+                            <span class="replies">
+                                <i class="fas fa-comments"></i>
+                                <span th:text="${topic.replyCount}"></span> &nbsp; Replies
+                            </span>
+                        </div>
+                        <p class="topic-preview" th:text="${topic.content}"></p>
+                    </div>
+                    <div class="topic-tags" th:if="${!#lists.isEmpty(topic.tags)}">
+                        <span th:each="tag : ${topic.tags.split(',')}" class="tag" th:text="${tag}"></span>
+                    </div>
+                    </a>
+                    <div class="admin-table-actions" th:if="${session.userId == topic.author.id}">
+                        <button th:onclick="'editForum(' + ${topic.id} + ')'" class="admin-table-action edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button th:onclick="'deleteForum(' + ${topic.id} + ')'" class="admin-table-action delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <a href="#" class="page-link active">1</a>
+                <a href="#" class="page-link">2</a>
+                <a href="#" class="page-link">3</a>
+                <a href="#" class="page-link">4</a>
+                <a href="#" class="page-link">5</a>
+                <a href="#" class="page-link"><i class="fas fa-chevron-right"></i></a>
+            </div>
+
+            <div class="forum-stats">
+                <div class="stat">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" th:text="${totalUsers}"></span>
+                        <span class="stat-label">Community Members</span>
+                    </div>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-comments"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" th:text="${totalTopics}"></span>
+                        <span class="stat-label">Total Discussions</span>
+                    </div>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-clock"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">24/7</span>
+                        <span class="stat-label">Active Community</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2><i class="fas fa-leaf"></i> KrishiTech</h2>
+                <p>Smart Farming Solutions</p><br>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a th:href="@{/guides}">Farming Guides</a></li>
+                        <li><a th:href="@{/weatherForecast}">Weather Forecast</a></li>
+                        <li><a th:href="@{/marketForecast}">Market Price Forecast</a></li>
+                        <li><a th:href="@{/forum}">Community Forums</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</li>
+                        <li><i class="fas fa-phone"></i> 9800000000</li>
+                        <li><i class="fas fa-envelope"></i> KrishiTech@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- New Topic Modal -->
+    <div id="newTopicModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Create New Topic</h2>
+            <form id="newTopicForm">
+                <input type="hidden" id="id" name="id" >
+
+                <div class="form-group">
+                    <label for="topicTitle">Title</label>
+                    <input type="text" id="topicTitle" name="title" required
+                           placeholder="Enter a descriptive title">
+                </div>
+
+                <div class="form-group">
+                    <label for="topicCategory">Category</label>
+                    <select id="topicCategory" name="categoryId" required>
+                        <option value="">Select a category</option>
+                        <option th:each="category : ${fcategories}"
+                                th:value="${category.id}"
+                                th:text="${category.name}">
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="topicContent">Content</label>
+                    <textarea id="topicContent" name="content" rows="8" required
+                              placeholder="Share your detailed question or experience..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="topicTags">Tags (comma separated)</label>
+                    <input type="text" id="topicTags" name="tags" placeholder="e.g., corn, irrigation, organic">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Post Topic</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script th:src="@{/js/forum.js}"></script>
+</body>
+</html>

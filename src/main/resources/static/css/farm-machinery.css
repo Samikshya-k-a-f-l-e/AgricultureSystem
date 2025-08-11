@@ -1,0 +1,556 @@
+/* Farm Machinery Page Specific Styles */
+:root {
+    --machinery-primary: #4caf50;
+    --machinery-primary-dark: #388e3c;
+    --machinery-primary-light: #a5d6a7;
+    --machinery-secondary: #ff9800;
+    --machinery-positive: #4caf50;
+    --machinery-negative: #f44336;
+    --machinery-neutral: #607d8b;
+    --machinery-bg: #f9f9f9;
+    --machinery-card-bg: #ffffff;
+    --machinery-text: #333333;
+    --machinery-text-light: #666666;
+    --machinery-border: #e0e0e0;
+    --machinery-highlight: #f0f7e6;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Machinery Hero Section */
+  .machinery-hero {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      url("/placeholder.svg?height=800&width=1600");
+    background-size: cover;
+    background-position: center;
+    height: 40vh;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    margin-top: 70px;
+    padding: 0 20px;
+  }
+  
+  .machinery-hero-content {
+    max-width: 800px;
+  }
+  
+  .machinery-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .machinery-hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  
+  .machinery-search-container {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  #machinerySearch {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    font-size: 1rem;
+  }
+  
+  #searchButton {
+    background-color: var(--machinery-primary);
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    padding: 0 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #searchButton:hover {
+    background-color: var(--machinery-primary-dark);
+  }
+  
+  /* Filters Section */
+  .machinery-filters {
+    padding: 2rem 0;
+    background-color: var(--white);
+    border-bottom: 1px solid var(--machinery-border);
+  }
+  
+  .filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-end;
+  }
+  
+  .filter-group {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .filter-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--machinery-text);
+  }
+  
+  .filter-group select,
+  .filter-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--machinery-border);
+    border-radius: 4px;
+    background-color: var(--white);
+  }
+  
+  /* Categories Section */
+  .machinery-categories {
+    padding: 3rem 0;
+    background-color: var(--machinery-bg);
+  }
+  
+  .machinery-categories h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--primary-dark);
+    margin-bottom: 2rem;
+  }
+  
+  .category-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .category-card {
+    background-color: var(--machinery-card-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    color: var(--machinery-text);
+  }
+  
+  .category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .category-icon {
+    font-size: 3rem;
+    color: var(--machinery-primary);
+    margin-bottom: 1rem;
+  }
+  
+  .category-card h3 {
+    font-size: 1.2rem;
+    color: var(--machinery-text);
+  }
+  
+  /* Machinery Section */
+  .machinery-section {
+    padding: 4rem 0;
+  }
+  
+  .machinery-section:nth-child(odd) {
+    background-color: var(--white);
+  }
+  
+  .machinery-section:nth-child(even) {
+    background-color: var(--machinery-bg);
+  }
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .section-header h2 {
+    font-size: 2.5rem;
+    color: var(--primary-dark);
+    margin-bottom: 0.5rem;
+  }
+  
+  .section-header p {
+    font-size: 1.1rem;
+    color: var(--machinery-text-light);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .machinery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+  
+  .machinery-card {
+    background-color: var(--machinery-card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .machinery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .machinery-image {
+    height: 250px;
+    overflow: hidden;
+  }
+  
+  .machinery-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+  
+  .machinery-card:hover .machinery-image img {
+    transform: scale(1.05);
+  }
+  
+  .machinery-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  .machinery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  
+  .machinery-header h3 {
+    font-size: 1.3rem;
+    color: var(--machinery-text);
+    margin-right: 1rem;
+  }
+  
+  .machinery-condition {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  .machinery-condition.new {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: var(--machinery-positive);
+  }
+  
+  .machinery-condition.used {
+    background-color: rgba(255, 152, 0, 0.1);
+    color: var(--machinery-secondary);
+  }
+  
+  .machinery-condition.certified {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: #2196f3;
+  }
+  
+  .machinery-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .spec-item {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .spec-label {
+    color: var(--machinery-text-light);
+  }
+  
+  .spec-value {
+    font-weight: 500;
+    color: var(--machinery-text);
+  }
+  
+  .machinery-price {
+    margin-bottom: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--machinery-border);
+  }
+  
+  .price-range {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .price-label {
+    font-weight: 600;
+    color: var(--machinery-text);
+  }
+  
+  .price-value {
+    font-weight: 700;
+    color: var(--machinery-primary-dark);
+  }
+  
+  .price-options {
+    font-size: 0.9rem;
+    color: var(--machinery-text-light);
+  }
+  
+  .lease-option,
+  .financing-option,
+  .note {
+    display: block;
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+  
+  .machinery-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+  }
+  
+  /* Calculator Section */
+  .machinery-calculator {
+    padding: 4rem 0;
+    background-color: var(--machinery-bg);
+  }
+  
+  .calculator-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .calculator-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .calculator-results {
+    background-color: var(--machinery-highlight);
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+  
+  .result-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .result-section h4 {
+    font-size: 1.2rem;
+    color: var(--machinery-text);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--machinery-border);
+  }
+  
+  .result-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .result-label {
+    color: var(--machinery-text);
+  }
+  
+  .result-value {
+    font-weight: 600;
+  }
+  
+  /* Financing Options Section */
+  .financing-options {
+    padding: 4rem 0;
+    background-color: var(--white);
+  }
+  
+  .financing-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .financing-card {
+    background-color: var(--machinery-bg);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+  }
+  
+  .financing-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .financing-icon {
+    font-size: 3rem;
+    color: var(--machinery-primary);
+    margin-bottom: 1.5rem;
+  }
+  
+  .financing-card h3 {
+    font-size: 1.5rem;
+    color: var(--machinery-text);
+    margin-bottom: 1.5rem;
+  }
+  
+  .financing-features {
+    text-align: left;
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+  
+  .financing-features li {
+    margin-bottom: 0.8rem;
+    color: var(--machinery-text);
+  }
+  
+  .financing-note {
+    font-style: italic;
+    color: var(--machinery-text-light);
+    margin-bottom: 1.5rem;
+  }
+  
+  .financing-disclaimer {
+    font-size: 0.9rem;
+    color: var(--machinery-text-light);
+    font-style: italic;
+    text-align: center;
+  }
+  
+  /* Dealer Locator Section */
+  .dealer-locator {
+    padding: 4rem 0;
+    background-color: var(--machinery-bg);
+  }
+  
+  .dealer-search {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+  
+  .dealer-search-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .dealer-map-container {
+    height: 400px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dealer-map {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .map-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 992px) {
+    .calculator-container {
+      grid-template-columns: 1fr;
+    }
+  
+    .machinery-card {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .machinery-hero h1 {
+      font-size: 2.2rem;
+    }
+  
+    .machinery-search-container {
+      flex-direction: column;
+    }
+  
+    #machinerySearch {
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+  
+    #searchButton {
+      border-radius: 4px;
+      padding: 12px;
+    }
+  
+    .filter-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .filter-group {
+      width: 100%;
+    }
+  
+    .machinery-actions {
+      flex-direction: column;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .machinery-header {
+      flex-direction: column;
+    }
+  
+    .machinery-condition {
+      margin-top: 0.5rem;
+    }
+  
+    .spec-item {
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+  
+    .price-range {
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+  }
+  
+  

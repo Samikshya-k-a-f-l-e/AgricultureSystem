@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content Management - KrishiTech Admin</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-header">
+        <div class="admin-sidebar-logo">
+          <h1>KrishiTech</h1>
+        </div>
+        <button class="admin-sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <nav class="admin-sidebar-menu">
+        <ul>
+          <li>
+            <a th:href="@{adminDashboard}">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{users}">
+              <i class="fas fa-users"></i>
+              <span>User Management</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{content}" class="active">
+              <i class="fas fa-file-alt"></i>
+              <span>Content Management</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{adminGuides}">
+              <i class="fas fa-book"></i>
+              <span>Farming Guides</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{forums}">
+              <i class="fas fa-comments"></i>
+              <span>Forums</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{marketData}">
+              <i class="fas fa-chart-line"></i>
+              <span>Market Data</span>
+            </a>
+          </li>
+<!--          <li>-->
+<!--            <a th:href="@{adminMachinery}">-->
+<!--              <i class="fas fa-tractor"></i>-->
+<!--              <span>Machinery Listings</span>-->
+<!--            </a>-->
+<!--          </li>-->
+        </ul>
+
+<!--        <div class="admin-sidebar-divider"></div>-->
+
+<!--        <ul>-->
+<!--          <li>-->
+<!--            <a href="analytics.html">-->
+<!--              <i class="fas fa-chart-bar"></i>-->
+<!--              <span>Analytics</span>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--          <li>-->
+<!--            <a th:href="@{settings}">-->
+<!--              <i class="fas fa-cog"></i>-->
+<!--              <span>Settings</span>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--        </ul>-->
+      </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="admin-content">
+      <!-- Header -->
+      <header class="admin-header">
+        <div class="admin-header-title">
+          <h1>Content Management</h1>
+          <div class="admin-header-breadcrumb">
+            <a href="dashboard.html">Home</a>
+            <span>/</span>
+            <span>Content Management</span>
+          </div>
+        </div>
+        
+        <div class="admin-header-actions">
+<!--          <div class="admin-search">-->
+<!--            <i class="fas fa-search"></i>-->
+<!--            <input type="text" placeholder="Search content...">-->
+<!--          </div>-->
+          
+          <div class="admin-user-menu" id="userMenu">
+            <button class="admin-user-button" id="userMenuButton">
+              <div class="admin-user-avatar">
+                <span th:text="${(session.userName.contains(' ') ?
+                (#strings.substring(session.userName, 0, 1) + #strings.substring(session.userName, session.userName.indexOf(' ') + 1, session.userName.indexOf(' ') + 2)):
+                (#strings.substring(session.userName, 0, 1))).toUpperCase()}"></span>
+              </div>
+              <div class="admin-user-info">
+                <div class="admin-user-name" th:text="${session.userName}"></div>
+                <div class="admin-user-role" th:text="${session.role}"></div>
+              </div>
+            </button>
+            
+            <div class="admin-user-dropdown" id="userDropdown">
+              <ul>
+                <li>
+                  <a href="profile.html">
+                    <i class="fas fa-user"></i>
+                    Profile
+                  </a>
+                </li>
+                <li>
+                  <a href="settings.html">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                  </a>
+                </li>
+                <div class="admin-user-dropdown-divider"></div>
+                <li>
+                  <a href="login.html">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Content Management Sections -->
+      <div class="admin-dashboard-grid">
+        <!-- Pages Section -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">Pages</h3>
+            <div class="admin-card-actions">
+              <a href="content-add.html?type=page" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New
+              </a>
+            </div>
+          </div>
+          
+          <div class="admin-table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Author</th>
+                  <th>Last Updated</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Home</td>
+                  <td>Sarah Johnson</td>
+                  <td>June 10, 2025</td>
+                  <td><span class="admin-status active">Published</span></td>
+                  <td>
+                    <div class="admin-table-actions">
+                      <a href="content-edit.html?id=1&type=page" class="admin-table-action edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <button class="admin-table-action delete">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>About Us</td>
+                  <td>Michael Brown</td>
+                  <td>May 28, 2025</td>
+                  <td><span class="admin-status active">Published</span></td>
+                  <td>
+                    <div class="admin-table-actions">
+                      <a href="content-edit.html?id=2&type=page" class="admin-table-action edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <button class="admin-table-action delete">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Contact</td>
+                  <td>Emily Davis</td>
+                  <td>June 5, 2025</td>
+                  <td><span class="admin-status active">Published</span></td>
+                  <td>
+                    <div class="admin-table-actions">
+                      <a href="content-edit.html?id=3&type=page" class="admin-table-action edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <button class="admin-table-action delete">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Blog Posts Section -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">Blog Posts</h3>
+            <div class="admin-card-actions">
+              <a href="content-add.html?type=post" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New
+              </a>
+            </div>
+          </div>
+          
+          <div class="admin-table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Author</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>10 Tips for Sustainable Farming</td>
+                  <td>Sarah Johnson</td>
+                  <td>June 15, 2025</td>
+                  <td><span class="admin-status active">Published</span></td>
+                  <td>
+                    <div class="admin-table-actions">
+                      <a href="content-edit.html?id=1&type=post" class="admin-table-action edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <button class="admin-table-action delete">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Understanding Soil Health</td>
+                  <td>Robert Wilson</td>
+                  <td>June 12, 2025</td>
+                  <td><span class="admin-status active">Published</span></td>
+                  <td>
+                    <div class="admin-table-actions">
+                      <a href="content-edit.html?id=2&type=post" class="admin-table-action edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <button class="admin-table-action delete">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>The Future of Precision Agriculture</td>
+                  <td>Emily Davis</td>
+                  <td>June 8, 2025</td>
+                  <td><span class="admin-status pending">Draft</span></td>
+                  <td>
+                    <div class="admin-table-actions">
+                      <a href="content-edit.html?id=3&type=post" class="admin-table-action edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <button class="admin-table-action delete">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Media Library Section -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3 class="admin-card-title">Media Library</h3>
+          <div class="admin-card-actions">
+            <button class="btn btn-primary" id="uploadMediaBtn">
+              <i class="fas fa-upload"></i> Upload Media
+            </button>
+          </div>
+        </div>
+        
+        <div class="admin-media-grid">
+          <div class="admin-media-item">
+            <div class="admin-media-preview">
+              <img src="/placeholder.svg?height=150&width=150" alt="Media item">
+            </div>
+            <div class="admin-media-info">
+              <div class="admin-media-name">tractor-image.jpg</div>
+              <div class="admin-media-meta">1.2 MB • June 15, 2025</div>
+            </div>
+            <div class="admin-media-actions">
+              <button class="admin-table-action">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="admin-table-action delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="admin-media-item">
+            <div class="admin-media-preview">
+              <img src="/placeholder.svg?height=150&width=150" alt="Media item">
+            </div>
+            <div class="admin-media-info">
+              <div class="admin-media-name">crop-field.jpg</div>
+              <div class="admin-media-meta">2.5 MB • June 10, 2025</div>
+            </div>
+            <div class="admin-media-actions">
+              <button class="admin-table-action">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="admin-table-action delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="admin-media-item">
+            <div class="admin-media-preview">
+              <img src="/placeholder.svg?height=150&width=150" alt="Media item">
+            </div>
+            <div class="admin-media-info">
+              <div class="admin-media-name">farm-equipment.jpg</div>
+              <div class="admin-media-meta">1.8 MB • June 5, 2025</div>
+            </div>
+            <div class="admin-media-actions">
+              <button class="admin-table-action">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="admin-table-action delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="admin-media-item">
+            <div class="admin-media-preview">
+              <img src="/placeholder.svg?height=150&width=150" alt="Media item">
+            </div>
+            <div class="admin-media-info">
+              <div class="admin-media-name">irrigation-system.jpg</div>
+              <div class="admin-media-meta">1.5 MB • May 28, 2025</div>
+            </div>
+            <div class="admin-media-actions">
+              <button class="admin-table-action">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="admin-table-action delete">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="admin-pagination">
+          <div class="admin-pagination-info">
+            Showing 1 to 4 of 24 items
+          </div>
+          <div class="admin-pagination-buttons">
+            <button class="admin-pagination-button" disabled>
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="admin-pagination-button active">1</button>
+            <button class="admin-pagination-button">2</button>
+            <button class="admin-pagination-button">3</button>
+            <button class="admin-pagination-button">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script th:src="@{/admin.js}"></script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - KrishiTech</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{admin.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-header">
+        <div class="admin-sidebar-logo">
+          <h1>KrishiTech</h1>
+        </div>
+        <button class="admin-sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <nav class="admin-sidebar-menu">
+        <ul>
+          <li>
+            <a th:href="@{adminDashboard}" class="active">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{users}">
+              <i class="fas fa-users"></i>
+              <span>User Management</span>
+            </a>
+          </li>
+<!--          <li>-->
+<!--            <a th:href="@{content}">-->
+<!--              <i class="fas fa-file-alt"></i>-->
+<!--              <span>Content Management</span>-->
+<!--            </a>-->
+<!--          </li>-->
+          <li>
+            <a th:href="@{adminGuides}">
+              <i class="fas fa-book"></i>
+              <span>Farming Guides</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{forums}">
+              <i class="fas fa-comments"></i>
+              <span>Forums</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{marketData}">
+              <i class="fas fa-chart-line"></i>
+              <span>Market Data</span>
+            </a>
+          </li>
+<!--          <li>-->
+<!--            <a th:href="@{adminMachinery}">-->
+<!--              <i class="fas fa-tractor"></i>-->
+<!--              <span>Machinery Listings</span>-->
+<!--            </a>-->
+<!--          </li>-->
+        </ul>
+
+<!--        <div class="admin-sidebar-divider"></div>-->
+<!--        -->
+<!--        <ul>-->
+<!--          <li>-->
+<!--            <a href="analytics.html">-->
+<!--              <i class="fas fa-chart-bar"></i>-->
+<!--              <span>Analytics</span>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--          <li>-->
+<!--            <a th:href="@{settings}">-->
+<!--              <i class="fas fa-cog"></i>-->
+<!--              <span>Settings</span>-->
+<!--            </a>-->
+<!--          </li>-->
+<!--        </ul>-->
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+      <!-- Header -->
+      <header class="admin-header">
+        <div class="admin-header-title">
+          <h1>Dashboard</h1>
+          <div class="admin-header-breadcrumb">
+            <a href="dashboard.html">Home</a>
+            <span>/</span>
+            <span>Dashboard</span>
+          </div>
+        </div>
+
+        <div class="admin-header-actions">
+<!--          <div class="admin-search">-->
+<!--            <i class="fas fa-search"></i>-->
+<!--            <input type="text" placeholder="Search...">-->
+<!--          </div>-->
+
+          <div class="admin-user-menu" id="userMenu">
+            <button class="admin-user-button" id="userMenuButton">
+              <div class="admin-user-avatar">
+                <span th:text="${(session.userName.contains(' ') ?
+                (#strings.substring(session.userName, 0, 1) + #strings.substring(session.userName, session.userName.indexOf(' ') + 1, session.userName.indexOf(' ') + 2)):
+                (#strings.substring(session.userName, 0, 1))).toUpperCase()}"></span>
+              </div>
+              <div class="admin-user-info">
+                <div class="admin-user-name" th:text="${session.userName}"></div>
+                <div class="admin-user-role" th:text="${session.role}"></div>
+              </div>
+            </button>
+
+            <div class="admin-user-dropdown" id="userDropdown">
+              <ul>
+                <div class="admin-user-dropdown-divider"></div>
+                <li>
+                  <a th:href="@{/adminLogout}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <div class="admin-dashboard-grid">
+        <!-- Stat Card 1 -->
+        <div class="admin-card">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon primary">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="admin-stat-content">
+              <h3 class="admin-stat-value" th:text="${userList.size()}"></h3>
+              <p class="admin-stat-label">Total Users</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stat Card 2 -->
+        <div class="admin-card">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon info">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="admin-stat-content">
+              <h3 class="admin-stat-value" th:text="${guides.size()}">156</h3>
+              <p class="admin-stat-label">Farming Guides</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stat Card 3 -->
+        <div class="admin-card">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon success">
+              <i class="fas fa-comments"></i>
+            </div>
+            <div class="admin-stat-content">
+              <h3 class="admin-stat-value" th:text="${totalTopics}"></h3>
+              <p class="admin-stat-label">Forum Posts</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Replace your existing chart section with this: -->
+      <div class="admin-dashboard-grid">
+        <!-- Statistics Cards (keep your existing ones) -->
+
+        <!-- User Activity Chart -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3 class="admin-card-title">Monthly User Activity</h3>
+          </div>
+          <div class="chart-container">
+            <canvas id="userActivityChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Forum Activity Chart -->
+<!--        <div class="admin-card">-->
+<!--          <div class="admin-card-header">-->
+<!--            <h3 class="admin-card-title">Forum Activity</h3>-->
+<!--            <div class="admin-card-actions">-->
+<!--              <div class="time-range-selector">-->
+<!--                <button class="time-range-btn active" data-range="daily">Daily</button>-->
+<!--                <button class="time-range-btn" data-range="weekly">Weekly</button>-->
+<!--                <button class="time-range-btn" data-range="monthly">Monthly</button>-->
+<!--              </div>-->
+<!--              <button class="admin-card-action" id="refreshForumChart">-->
+<!--                <i class="fas fa-sync-alt"></i>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="chart-container">-->
+<!--            <canvas id="forumActivityChart"></canvas>-->
+<!--          </div>-->
+<!--          -->
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script th:src="@{/admin.js}"></script>
+</body>
+</html>

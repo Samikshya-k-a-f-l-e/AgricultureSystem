@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Forecasting - KrishiTech</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/weather-forecast.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+      <nav class="navbar">
+          <div class="logo">
+              <h1>KrishiTech</h1>
+              <span class="tagline">Smart Farming Solutions</span>
+          </div>
+          <div class="menu-toggle" id="mobile-menu">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+          </div>
+           <ul class="nav-menu">
+               <li><a th:href="@{/}">Home</a></li>
+               <li><a th:href="@{/guides}">Farming Guides</a></li>
+<!--               <li><a th:href="@{/machinery}">Machinery</a></li>-->
+               <li><a th:href="@{/weatherForecast}" class="active">Weather</a></li>
+               <li><a th:href="@{/marketForecast}">Market</a></li>
+               <!-- Show Profile Dropdown If User Is Logged In -->
+               <li class="dropdown" th:if="${session.userId}">
+                   <a href="#" class="dropbtn">Profile ▼</a>
+                   <ul class="dropdown-content">
+                       <li><a th:href="@{/profile}">View Profile</a></li>
+                       <li><a th:href="@{/settings}">Settings</a></li>
+                       <li><a th:href="@{/forum}">Community</a></li>
+                       <li><a th:href="@{/logout}">Logout</a></li>
+                   </ul>
+               </li>
+
+               <!-- Show Login Option If User Is NOT Logged In -->
+               <li th:if="${session.userId == null}">
+                   <a th:href="@{/login}">Login</a>
+               </li>
+            </ul>
+      </nav>
+  </header>
+
+  <section class="weather-hero">
+      <div class="weather-hero-content">
+          <h1>Agricultural Weather Forecasting</h1>
+          <p>Make informed farming decisions with accurate, farm-specific weather data</p>
+          <div class="location-search">
+              <input type="text" id="locationSearch" placeholder="Enter your farm location">
+              <button id="searchButton"><i class="fas fa-search"></i></button>
+              <button id="useCurrentLocation"><i class="fas fa-map-marker-alt"></i></button>
+          </div>
+      </div>
+  </section>
+
+  <section class="current-weather-section">
+      <div class="container">
+          <div class="current-weather-card" id="currentWeatherCard">
+              <!-- Current weather will be populated by JavaScript -->
+              <div class="weather-loading">
+                  <i class="fas fa-spinner fa-pulse"></i>
+                  <p>Loading weather data...</p>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <section class="forecast-section">
+      <div class="container">
+          <h2>5-Day Forecast</h2>
+          <div class="forecast-container" id="forecastContainer">
+              <!-- Forecast will be populated by JavaScript -->
+          </div>
+      </div>
+  </section>
+
+  <section class="weather-impact-section">
+      <div class="container">
+          <h2>Weather Impact Analysis</h2>
+          <div class="impact-tabs">
+              <button class="impact-tab active" data-crop="all">All Crops</button>
+              <button class="impact-tab" data-crop="maize">Maize</button>
+              <button class="impact-tab" data-crop="wheat">Wheat</button>
+              <button class="impact-tab" data-crop="potato">Potato</button>
+              <button class="impact-tab" data-crop="tomato">Tomato</button>
+              <button class="impact-tab" data-crop="onion">Onion</button>
+          </div>
+          <div class="impact-container" id="impactContainer">
+                  <!-- Heat Stress Risk -->
+                  <div class="impact-card" data-crops="all,corn,vegetables,maize,tomato">
+                      <div class="impact-header">
+                          <div class="impact-icon">
+                              <i class="fas fa-temperature-high"></i>
+                          </div>
+                          <div class="impact-title">Heat Stress Risk</div>
+                      </div>
+                      <div class="impact-description">
+                          Current high temperatures may cause heat stress in crops. Consider increasing irrigation frequency and applying shade cloth where possible.
+                      </div>
+                      <div class="impact-severity">
+                          <div class="severity-label">Impact Level:</div>
+                          <div class="severity-indicator">
+                              <div class="severity-fill medium"></div>
+                          </div>
+                          <div class="severity-value medium">Moderate</div>
+                      </div>
+                  </div>
+
+                  <!-- Disease Pressure -->
+                  <div class="impact-card" data-crops="all,wheat,vegetables,tomato">
+                      <div class="impact-header">
+                          <div class="impact-icon">
+                              <i class="fas fa-disease"></i>
+                          </div>
+                          <div class="impact-title">Disease Pressure</div>
+                      </div>
+                      <div class="impact-description">
+                          Humid conditions increase risk of fungal diseases. Monitor crops closely and consider preventative fungicide application.
+                      </div>
+                      <div class="impact-severity">
+                          <div class="severity-label">Impact Level:</div>
+                          <div class="severity-indicator">
+                              <div class="severity-fill high"></div>
+                          </div>
+                          <div class="severity-value high">High</div>
+                      </div>
+                  </div>
+
+                  <!-- Irrigation Needs -->
+                  <div class="impact-card" data-crops="all,corn,soybeans,vegetables,maize,potato">
+                      <div class="impact-header">
+                          <div class="impact-icon">
+                              <i class="fas fa-tint"></i>
+                          </div>
+                          <div class="impact-title">Irrigation Needs</div>
+                      </div>
+                      <div class="impact-description">
+                          Soil moisture levels are adequate but expected to decline with forecasted heat. Plan irrigation accordingly.
+                      </div>
+                      <div class="impact-severity">
+                          <div class="severity-label">Impact Level:</div>
+                          <div class="severity-indicator">
+                              <div class="severity-fill low"></div>
+                          </div>
+                          <div class="severity-value low">Low</div>
+                      </div>
+                  </div>
+
+                  <!-- Harvest Conditions -->
+                  <div class="impact-card" data-crops="all,wheat,onion">
+                      <div class="impact-header">
+                          <div class="impact-icon">
+                              <i class="fas fa-tractor"></i>
+                          </div>
+                          <div class="impact-title">Harvest Conditions</div>
+                      </div>
+                      <div class="impact-description">
+                          Favorable conditions for harvest operations.
+                      </div>
+                      <div class="impact-severity">
+                          <div class="severity-label">Impact Level:</div>
+                          <div class="severity-indicator">
+                              <div class="severity-fill low"></div>
+                          </div>
+                          <div class="severity-value low">Low</div>
+                      </div>
+                  </div>
+
+              </div>
+
+      </div>
+  </section>
+
+  <footer>
+      <div class="footer-content">
+          <div class="footer-logo">
+              <h2><i class="fas fa-leaf"></i> KrishiTech</h2>
+              <p>Smart Farming Solutions</p><br>
+              <div class="social-links">
+                  <a href="#"><i class="fab fa-facebook"></i></a>
+                  <a href="#"><i class="fab fa-twitter"></i></a>
+                  <a href="#"><i class="fab fa-instagram"></i></a>
+                  <a href="#"><i class="fab fa-youtube"></i></a>
+              </div>
+          </div>
+          <div class="footer-links">
+              <div class="footer-column">
+                  <h3>Quick Links</h3>
+                  <ul>
+                      <li><a th:href="@{/guides}">Farming Guides</a></li>
+                      <li><a th:href="@{/weatherForecast}">Weather Forecast</a></li>
+                      <li><a th:href="@{/marketForecast}">Market Price Forecast</a></li>
+                      <li><a th:href="@{/forum}">Community Forums</a></li>
+                  </ul>
+              </div>
+              <div class="footer-column">
+                  <h3>Contact Us</h3>
+                  <ul>
+                      <li><i class="fas fa-map-marker-alt"></i> Kathmandu, Nepal</li>
+                      <li><i class="fas fa-phone"></i> 9800000000</li>
+                      <li><i class="fas fa-envelope"></i> KrishiTech@gmail.com</li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script th:src="@{/js/weather-forecast.js}"></script>
+</body>
+</html>
